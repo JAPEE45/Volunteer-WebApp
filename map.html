@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/map.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+<body>
+     <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <img src="img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
+    </div>
+    <a href="homePage.html">Dashboard</a>
+    <a href="volunteers.html">Volunteers</a>
+    <a href="events.html">Events</a>
+    <a href="#">Map</a>
+    <a href="sms.html">SMS Alerts</a>
+  </div>
+
+  <button class="menu-toggle" id="menu-toggle">☰</button>
+
+  <div class="content">
+    <h1>VOLUNTEERS MAP</h1>
+    <div id="map"></div>
+  </div>
+
+  <div id="volunteerModal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeModal">&times;</span>
+      <h3>DEPLOYMENT INFORMATION</h3>
+      <div id="volunteerList"></div>
+    </div>
+  </div>
+</body>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="script/map.js"></script>
+</html>

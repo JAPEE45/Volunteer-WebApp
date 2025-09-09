@@ -1,0 +1,35 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #b30000;
+  color: white;
+}
+
+.landing {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+.landing img {
+  width: 200px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+}
+.landing button {
+  background: white;
+  color: #b30000;
+  border: none;
+  padding: 12px 60px;
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.landing button:hover {
+  background: #eee;
+}

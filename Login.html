@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/login.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+     <div class="login-container">
+    <div class="logo">
+      <img src="img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
+    </div>
+    <form onsubmit="return loginUser()">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button type="submit">Login</button>
+    </form>
+    <div class="social-login">
+      <p>- - Login with - -</p>
+      <i class="fa-brands fa-facebook" style="color: #1877f2;"></i>
+      <i class="fa-solid fa-envelope" style="color: #1877f2;"></i>
+    </div>
+  </div>
+</body>
+<script src="script/login.js"></script>
+</html>
