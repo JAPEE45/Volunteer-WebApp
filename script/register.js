@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
         bloodType: document.getElementById("bloodType").value
       };
 
-      let volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
-      volunteers.push(volunteer);
-      localStorage.setItem("volunteers", JSON.stringify(volunteers));
+      // Save to "pending" instead of volunteers
+      let pending = JSON.parse(localStorage.getItem("pendingVolunteers")) || [];
+      pending.push(volunteer);
+      localStorage.setItem("pendingVolunteers", JSON.stringify(pending));
 
-      alert("Registration successful!");
-
+      alert("Registration submitted! Awaiting approval in SMS Alerts.");
       form.reset();
       window.location.href = "homePage.html";
     });

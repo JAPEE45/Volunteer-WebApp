@@ -21,19 +21,26 @@
   <button class="menu-toggle" id="menu-toggle">☰</button>
 
   <div class="content">
-    <h1>Volunteers</h1>
-    <button onclick="openModal()">ADD VOLUNTEER</button>
-    <div id="map"></div>
+    <div class="table-header">
+      <h1>Volunteers</h1>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search volunteer...">
+      </div>
+    </div>
+    <!-- <button onclick="openModal()">ADD VOLUNTEER</button> -->
+    <!-- <div id="map"></div> -->
     <table id="volunteerTable" border="1">
       <thead>
         <tr>
           <th>Name</th>
-          <th>Location</th>
+          <th>Deployment Location</th>
+          <th>Status</th>
           <th></th>
         </tr>
         <tr>
         <td>Maria Isabel D. Rebanal</td>
         <td>Virac, Catanduanes, Philippines</td>
+        <td></td>
         <td><button class="delete-btn" onclick="removeRow(this)">🗑</button></td>
       </tr>
       </thead>
@@ -43,7 +50,7 @@
     </table>
   </div>
 
-   <div class="modal" id="volunteerModal">
+   <!-- <div class="modal" id="volunteerModal">
     <div class="modal-content">
       <h3>Add Volunteer</h3>
       <input type="text" id="volName" placeholder="Enter name">
@@ -53,7 +60,7 @@
         <button onclick="closeModal()">Cancel</button>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="info-modal" id="infoModal">
     <div class="info-modal-content">
@@ -81,6 +88,15 @@
       </div>
     </div>
   </div>
+
+  <div class="success-modal" id="successModal">
+    <div class="success-modal-content">
+      <h3>✅ Deployment Successful</h3>
+      <p id="successMessage"></p>
+      <button onclick="closeSuccessModal()">OK</button>
+    </div>
+  </div>
+
 
 </body>
  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

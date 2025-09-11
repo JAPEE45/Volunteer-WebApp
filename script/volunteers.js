@@ -1,24 +1,24 @@
-var map = L.map('map').setView([13.5844, 124.2372], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap'
-}).addTo(map);
+// var map = L.map('map').setView([13.5844, 124.2372], 11);
+// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//   attribution: '© OpenStreetMap'
+// }).addTo(map);
 
-const locations = [
-  { name: "Virac, Catanduanes", coords: [13.5844, 124.2372] },
-  { name: "San Andres", coords: [13.598, 124.091] },
-  { name: "Pandan", coords: [14.058, 124.167] },
-  { name: "San Miguel", coords: [13.788, 124.219] },
-  { name: "Bato", coords: [13.602, 124.317] },
-  { name: "Panganiban", coords: [14.093, 124.329] },
-  { name: "Gigmoto", coords: [13.781, 124.390] },
-  { name: "Viga", coords: [13.884, 124.300] }
-];
+// const locations = [
+//   { name: "Virac, Catanduanes", coords: [13.5844, 124.2372] },
+//   { name: "San Andres", coords: [13.598, 124.091] },
+//   { name: "Pandan", coords: [14.058, 124.167] },
+//   { name: "San Miguel", coords: [13.788, 124.219] },
+//   { name: "Bato", coords: [13.602, 124.317] },
+//   { name: "Panganiban", coords: [14.093, 124.329] },
+//   { name: "Gigmoto", coords: [13.781, 124.390] },
+//   { name: "Viga", coords: [13.884, 124.300] }
+// ];
 
-locations.forEach(loc => {
-  L.marker(loc.coords)
-    .addTo(map)
-    .bindPopup(`<b>${loc.name}</b>`);
-});
+// locations.forEach(loc => {
+//   L.marker(loc.coords)
+//     .addTo(map)
+//     .bindPopup(`<b>${loc.name}</b>`);
+// });
 
 
 
@@ -67,6 +67,24 @@ function saveVolunteer() {
   }
 }
 
+// ---------- SEARCH VOLUNTEERS ----------
+
+document.getElementById("searchInput").addEventListener("keyup", function () {
+  const filter = this.value.toLowerCase();
+  const rows = document.querySelectorAll("#volunteerTable tbody tr");
+
+  rows.forEach(row => {
+    const name = row.querySelector("td").textContent.toLowerCase();
+    if (name.includes(filter)) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+});
+
+
+
 // ---------- REMOVE VOLUNTEER ----------
 function removeVolunteer(index) {
   let volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
@@ -80,14 +98,21 @@ function addVolunteerToTable(volunteer, index) {
   const table = document.getElementById("volunteerTable").querySelector("tbody");
   const row = document.createElement("tr");
 
+  const deployed = volunteer.deployedLocation ? true : false;
+  const statusDot = deployed 
+    ? `<span class="status-dot deployed"></span>` 
+    : `<span class="status-dot not-deployed"></span>`;
+
   row.innerHTML = `
     <td class="volunteer-name" data-index="${index}">${volunteer.fullName}</td>
-    <td>${volunteer.address}</td>
+    <td>${volunteer.deployedLocation || "Not deployed"}</td>
+    <td>${statusDot}</td>
     <td><button class="delete-btn" onclick="removeVolunteer(${index})">🗑</button></td>
   `;
 
   table.appendChild(row);
 }
+
 
 // ---------- RENDER ALL VOLUNTEERS ----------
 function renderTable() {
@@ -100,7 +125,6 @@ function renderTable() {
     addVolunteerToTable(volunteer, index);
   });
 
-  // add click event to each name
   document.querySelectorAll(".volunteer-name").forEach(td => {
     td.style.cursor = "pointer";
     td.addEventListener("click", () => {
@@ -117,7 +141,7 @@ function openInfoModal(volunteer) {
   document.getElementById("infoAddress").textContent = volunteer.address || "Not provided";
   document.getElementById("infoAge").textContent = volunteer.age || "Not provided";
   document.getElementById("infoSex").textContent = volunteer.sex || "Not provided";
-  document.getElementById("deployLocation").value = "";
+  document.getElementById("deployLocation").value = volunteer.deployedLocation || "";
   document.getElementById("infoModal").style.display = "flex";
 }
 
@@ -157,9 +181,16 @@ function submitDeployment() {
 
   localStorage.setItem("volunteers", JSON.stringify(updated));
 
-  alert(`${name} has been assigned to: ${deployLocation}`);
+  document.getElementById("successMessage").textContent = 
+    `${name} has been deployed to: ${deployLocation}`;
+  document.getElementById("successModal").style.display = "flex";
+
   closeInfoModal();
-  renderTable(); // refresh table
+  renderTable(); 
+}
+
+function closeSuccessModal() {
+  document.getElementById("successModal").style.display = "none";
 }
 
 // ---------- INITIALIZE ----------
