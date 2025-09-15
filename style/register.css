@@ -76,3 +76,33 @@
 .submit-btn:hover {
   background: #800000;
 }
+
+.form-table select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+  background: white;
+  font-size: 14px;
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.form-table select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+}
+
+.form-table select:hover {
+  border-color: #b30000;
+}
+.form-table select:focus {
+  outline: none;
+  border-color: #b30000;
+  box-shadow: 0 0 5px rgba(179, 0, 0, 0.4);
+}

@@ -17,3 +17,11 @@ toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("active");
   
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+      fetch("sidebar.html")
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById("sidebar-container").innerHTML = data;
+        });
+    });

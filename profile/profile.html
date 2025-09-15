@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/profile.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="../img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
+        </div>
+        <a href="#">Profile</a>
+        <a href="../profile/profileMap.html">Map</a>
+        <a href="../profile/profileSms.html">Sms</a>
+    </div>
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+
+    <div class="content">
+    <h1>Volunteer Profile</h1>
+    <div class="profile-header">
+      <img id="profileImage" src="img/default_profile.png" alt="Profile Picture" class="profile-pic">
+      <input type="file" id="fileInput" accept="image/*" style="display:none">
+      <button id="uploadBtn">Change Picture</button>
+    </div>
+    <section>
+      <h2>Personal Information</h2>
+      <div class="info-grid">
+        <div><strong>Full Name:</strong> <span id="infoName"></span></div>
+        <div><strong>Birth Place:</strong> <span id="infoBirthPlace"></span></div>
+        <div><strong>Sex:</strong> <span id="infoSex"></span></div>
+        <div><strong>Date of Birth:</strong> <span id="infoDob"></span></div>
+        <div><strong>Religion:</strong> <span id="infoReligion"></span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Physical Information</h2>
+      <div class="info-grid">
+        <div><strong>Height:</strong> <span id="infoHeight"></span> cm</div>
+        <div><strong>Weight:</strong> <span id="infoWeight"></span> kg</div>
+        <div><strong>Civil Status:</strong> <span id="infoCivilStatus"></span></div>
+        <div><strong>Spouse:</strong> <span id="infoSpouse"></span></div>
+        <div><strong>Children:</strong> <span id="infoChildren"></span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Contact Information</h2>
+      <div class="info-grid">
+        <div><strong>Mobile:</strong> <span id="infoMobile"></span></div>
+        <div><strong>Landline:</strong> <span id="infoLandline"></span></div>
+        <div class="full"><strong>Address:</strong> <span id="infoAddress"></span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Medical Information</h2>
+      <div class="info-grid">
+        <div><strong>Health:</strong> <span id="infoHealth"></span></div>
+        <div><strong>Medication:</strong> <span id="infoMedication"></span></div>
+        <div><strong>Blood Type:</strong> <span id="infoBloodType"></span></div>
+      </div>
+    </section>
+  </div>
+</body>
+<script src="../profile/js/profile.js"></script>
+</html>  

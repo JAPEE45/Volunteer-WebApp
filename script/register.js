@@ -5,8 +5,15 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
+      const firstName = document.getElementById("firstName").value;
+      const middleName = document.getElementById("middleName").value;
+      const lastName = document.getElementById("lastName").value;
+
       const volunteer = {
-        fullName: document.getElementById("fullName").value,
+        firstName,
+        middleName,
+        lastName,
+        fullName: `${firstName} ${middleName} ${lastName}`.trim(),
         birthPlace: document.getElementById("birthPlace").value,
         sex: document.getElementById("sex").value,
         dob: document.getElementById("dob").value,

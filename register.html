@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <link rel="stylesheet" href="style/register.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style/register.css">
 </head>
 <body>
-     <div class="header">
+  <div class="header">
     <img src="img/Philippine_Red_Cross_logo.jpg" alt="Red Cross">
     <h2>RED CROSS VOLUNTEER REGISTRATION</h2>
   </div>
@@ -16,8 +16,16 @@
     <h3>Personal Information</h3>
     <div class="grid">
       <div>
-        <label>Full Name</label>
-        <input type="text" id="fullName" required>
+        <label>First Name</label>
+        <input type="text" id="firstName" required>
+      </div>
+      <div>
+        <label>Middle Name</label>
+        <input type="text" id="middleName">
+      </div>
+      <div>
+        <label>Last Name</label>
+        <input type="text" id="lastName" required>
       </div>
       <div>
         <label>Birth Place</label>
@@ -25,7 +33,11 @@
       </div>
       <div>
         <label>Sex</label>
-        <input type="text" id="sex">
+        <select id="sex" required>
+          <option value="">-- Select --</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
       </div>
       <div>
         <label>Date of Birth</label>
