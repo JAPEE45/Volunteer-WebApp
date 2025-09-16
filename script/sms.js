@@ -5,15 +5,18 @@ const sidebar = document.getElementById("sidebar");
 
 toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("active");
-  
 });
 
+
+// ---------- MAIN SCRIPT ----------
 document.addEventListener("DOMContentLoaded", () => {
+  // ---------- REFERENCES ----------
   const tableBody = document.querySelector("#eventTable tbody");
   const modal = document.getElementById("volunteerModal");
   const detailsDiv = document.getElementById("volunteerDetails");
   let currentVolunteerIndex = null;
 
+  // ---------- LOAD PENDING VOLUNTEERS ----------
   function loadPending() {
     tableBody.innerHTML = "";
     let pending = JSON.parse(localStorage.getItem("pendingVolunteers")) || [];
@@ -29,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ---------- VIEW VOLUNTEER DETAILS ----------
   window.viewVolunteer = function(index) {
     let pending = JSON.parse(localStorage.getItem("pendingVolunteers")) || [];
     const v = pending[index];
@@ -56,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.style.display = "flex";
   };
 
+  // ---------- CONFIRM VOLUNTEER ----------
   document.getElementById("confirmBtn").addEventListener("click", () => {
     let pending = JSON.parse(localStorage.getItem("pendingVolunteers")) || [];
     let volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
@@ -73,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // ---------- REJECT VOLUNTEER ----------
   document.getElementById("rejectBtn").addEventListener("click", () => {
     let pending = JSON.parse(localStorage.getItem("pendingVolunteers")) || [];
 
@@ -86,10 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // ---------- CLOSE MODAL ----------
   window.closeModal = function() {
     modal.style.display = "none";
     currentVolunteerIndex = null;
   };
 
+  // ---------- INITIAL LOAD ----------
   loadPending();
 });

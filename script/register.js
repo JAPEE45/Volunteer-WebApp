@@ -1,14 +1,18 @@
+// ---------- WAIT FOR DOM TO LOAD ----------
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registrationForm");
 
   if (form) {
+    // ---------- FORM SUBMIT HANDLER ----------
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
+      // ---------- GET FORM VALUES ----------
       const firstName = document.getElementById("firstName").value;
       const middleName = document.getElementById("middleName").value;
       const lastName = document.getElementById("lastName").value;
 
+      // ---------- CREATE VOLUNTEER OBJECT ----------
       const volunteer = {
         firstName,
         middleName,
@@ -31,11 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
         bloodType: document.getElementById("bloodType").value
       };
 
-      // Save to "pending" instead of volunteers
+      // ---------- SAVE TO PENDING ----------
       let pending = JSON.parse(localStorage.getItem("pendingVolunteers")) || [];
       pending.push(volunteer);
       localStorage.setItem("pendingVolunteers", JSON.stringify(pending));
 
+      // ---------- FEEDBACK & REDIRECT ----------
       alert("Registration submitted! Awaiting approval in SMS Alerts.");
       form.reset();
       window.location.href = "homePage.html";

@@ -73,23 +73,6 @@ body {
   margin-bottom: 15px;
 }
 
-#searchEvent {
-  padding: 8px;
-  width: 200px;
-}
-
-#addEventBtn {
-  padding: 8px 16px;
-  background: #b30000;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
-#addEventBtn:hover {
-  background: #800000;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;

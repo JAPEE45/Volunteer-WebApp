@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style/homePage.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style/homePage.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body>
   <div class="sidebar" id="sidebar">
@@ -23,11 +23,27 @@
 
   <div class="content">
     <h1>Admin Dashboard</h1>
-
+    <!--
     <div class="cards">
       <div class="card">100 Volunteers</div>
       <div class="card">5 Upcoming Events</div>
       <div class="card">5 SMS Alerts</div>
+    </div>
+    -->
+
+    <div class="dashboard-graphs">
+      <div class="graph-card">
+        <h3>Volunteers Distribution</h3>
+        <canvas id="volunteersChart"></canvas>
+      </div>
+      <div class="graph-card">
+        <h3>Upcoming Events</h3>
+        <canvas id="eventsChart"></canvas>
+      </div>
+      <div class="graph-card">
+        <h3>SMS Alerts</h3>
+        <canvas id="smsChart"></canvas>
+      </div>
     </div>
 
     <div class="dashboard-layout">
@@ -60,17 +76,20 @@
       </div>
     </div>
 
+    <!--
     <div class="sms-logs">
-        <h3>Recent SMS Logs</h3>
-        <div class="sms">
-            <p>22 May 2025, 9:00 am - Notification: New Volunteer Event</p>
-            <p>18 May 2025, 4:10 pm - Reminder: Training Session</p>
+      <h3>Recent SMS Logs</h3>
+      <div class="sms">
+        <p>22 May 2025, 9:00 am - Notification: New Volunteer Event</p>
+        <p>18 May 2025, 4:10 pm - Reminder: Training Session</p>
       </div>
     </div>
-  </div>
-  </div>
-</body>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="script/homePage.js"></script>
+    -->
 
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script/homePage.js"></script>
+</body>
 </html>

@@ -10,17 +10,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const tableBody = document.querySelector("#eventTable tbody");
 
-  // ---------- SIDE NAV TOGGLE ----------
-
+  //--------- SIDEBAR ----------
   const toggleBtn = document.getElementById("menu-toggle");
   const sidebar = document.getElementById("sidebar");
 
   toggleBtn.addEventListener("click", () => {
     sidebar.classList.toggle("active");
-    
   });
 
-  
+  //--------- LOAD EVENTS ----------
   function loadEvents() {
     tableBody.innerHTML = "";
     let events = JSON.parse(localStorage.getItem("events")) || [];
@@ -44,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  //--------- DELETE EVENT ----------
   function deleteEvent(index) {
     let events = JSON.parse(localStorage.getItem("events")) || [];
     if (confirm("Are you sure you want to delete this event?")) {
@@ -53,14 +52,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  //--------- OPEN ADD EVENT MODAL ----------
   addEventBtn.addEventListener("click", () => {
     addEventModal.classList.remove("hidden");
   });
 
+  //--------- CLOSE ADD EVENT MODAL ----------
   closeAddModal.addEventListener("click", () => {
     addEventModal.classList.add("hidden");
   });
 
+  //--------- SAVE NEW EVENT ----------
   eventForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -79,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadEvents();
   });
 
+  //--------- VIEW EVENT ----------
   function viewEvent(event) {
     document.getElementById("viewName").textContent = event.name;
     document.getElementById("viewLocation").textContent = event.location;
@@ -86,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     viewEventModal.classList.remove("hidden");
   }
 
+  //--------- CLOSE VIEW EVENT MODAL ----------
   closeViewModal.addEventListener("click", () => {
     viewEventModal.classList.add("hidden");
   });
@@ -93,5 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
     viewEventModal.classList.add("hidden");
   });
 
+  //--------- INITIAL LOAD ----------
   loadEvents();
 });
