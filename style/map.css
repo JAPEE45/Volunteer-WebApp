@@ -9,6 +9,12 @@ body {
 
 .logo img { width: 150px; margin-bottom: 20px; border-radius: 50%; }
 
+.sidebar a i {
+  width: 20px;
+  text-align: center;
+  margin-right: 8px;
+}
+
 .sidebar {
   width: 240px;
   background: #b30000;
@@ -19,6 +25,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .sidebar a {
@@ -203,12 +210,38 @@ body {
 }
 .btn.neutral:hover { background:#e0e0e0; }
 @media (max-width: 600px) {
-  .modal { align-items: end; padding: 0; }
+  .menu-toggle {
+        display: block;
+      }
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        transition: left 0.3s ease;
+        height: 100%;
+        z-index: 1000;
+      }
+      .sidebar.active {
+        left: 0;
+      }
+      .content {
+        margin-left: 0 !important;
+      }
+       .content h1 {
+    font-size: 22px;
+    text-align: center;
+  }
+  .modal { 
+    align-items: center;  
+    justify-content: center;
+    padding: 0 16px; 
+  }
+
   .modal-content {
     width: 100%;
-    border-radius: 12px 12px 0 0;
+    max-width: 420px;
+    border-radius: 12px;
     padding: 14px;
-    max-height: 72vh;
+    max-height: 80vh;
   }
   .modal-close { right: 12px; top: 8px; }
   #map { height: calc(100vh - 130px); }
