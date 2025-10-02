@@ -1,3 +1,4 @@
+/* ===== Reset & Base ===== */
 * {
   margin: 0;
   padding: 0;
@@ -11,14 +12,16 @@ body {
   color: #333;
 }
 
-/* Sidebar */
+/* ===== Sidebar ===== */
 .sidebar {
   width: 220px;
   background: #b30000;
   color: white;
   padding: 20px 10px;
   position: fixed;
-  top: 0; bottom: 0; left: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,16 +42,18 @@ body {
   border-radius: 6px;
   transition: 0.2s;
 }
+
 .sidebar a:hover,
 .sidebar a.active {
   background: #800000;
 }
 
-/* Toggle button */
+/* ===== Toggle Button ===== */
 .menu-toggle {
   display: none;
   position: fixed;
-  top: 15px; left: 15px;
+  top: 15px;
+  left: 15px;
   background: #b30000;
   color: white;
   border: none;
@@ -58,22 +63,26 @@ body {
   cursor: pointer;
   z-index: 1001;
 }
-.content {
+
+/* ===== Content Area ===== */
+.content-centered {
   margin-left: 260px;
   padding: 30px;
   flex: 1;
+  max-width: 1100px;
 }
 
-.content h1 {
+.content-centered h1 {
   color: #222;
   margin-bottom: 25px;
   font-size: 28px;
   font-weight: 700;
   border-bottom: 3px solid #b30000;
   padding-bottom: 10px;
+  text-align: center;
 }
 
-
+/* ===== Profile Header ===== */
 .profile-header {
   text-align: center;
   margin-bottom: 40px;
@@ -82,15 +91,14 @@ body {
 .profile-pic {
   width: 160px;
   height: 160px;
-  border-radius: 50%;       
-  object-fit: cover;        
-  aspect-ratio: 1 / 1;      
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
   border: 4px solid #b30000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: block;
-  margin: 0 auto;           
+  margin: 0 auto;
 }
-
 
 #uploadBtn {
   margin-top: 12px;
@@ -103,16 +111,18 @@ body {
   font-size: 14px;
   transition: 0.3s;
 }
+
 #uploadBtn:hover {
   background: #800000;
 }
 
+/* ===== Sections ===== */
 section {
   margin-bottom: 30px;
   background: white;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 section h2 {
@@ -123,6 +133,7 @@ section h2 {
   margin: 0;
 }
 
+/* ===== Info Grid ===== */
 .info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -134,7 +145,13 @@ section h2 {
   border-bottom: 1px solid #eee;
   border-right: 1px solid #eee;
   font-size: 15px;
-  line-height: 1.4;
+  line-height: 1.5;
+  background: #fff;
+  transition: background 0.2s;
+}
+
+.info-grid div:hover {
+  background: #f9f9f9;
 }
 
 .info-grid div:nth-child(2n) {
@@ -145,31 +162,39 @@ section h2 {
   grid-column: span 2;
 }
 
-.info-grid div:hover {
-  background: #f9f9f9;
+.info-grid strong {
+  color: #b30000;
+  display: block;
+  margin-bottom: 4px;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 800px) {
-  .content {
+  .content-centered {
     margin-left: 0;
     padding: 20px;
   }
+
   .sidebar {
-        position: fixed;
-        left: -250px;
-        transition: left 0.3s ease;
-        height: 100%;
-        z-index: 1000;
-      }
+    position: fixed;
+    left: -250px;
+    transition: left 0.3s ease;
+    height: 100%;
+    z-index: 1000;
+  }
+
   .sidebar.active {
     left: 0;
   }
+
   .menu-toggle {
     display: block;
   }
+
   .info-grid {
     grid-template-columns: 1fr;
   }
+
   .info-grid .full {
     grid-column: span 1;
   }
