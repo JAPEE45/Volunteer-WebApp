@@ -1,17 +1,18 @@
+//--------- SIDEBAR ----------
+const toggleBtn = document.getElementById("menu-toggle");
+const sidebar = document.getElementById("sidebar");
+
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("active");
+});
+
+// ---------- MAP SCRIPT ----------
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("volunteerModal");
-  const closeModal = document.getElementById("closeModal");
-  const volunteerList = document.getElementById("volunteerList");
-
-  // ---------- SIDE NAV TOGGLE ----------
-
-  const toggleBtn = document.getElementById("menu-toggle");
-  const sidebar = document.getElementById("sidebar");
-
-  toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("active");
-    
-  });
+  const closeModalBtn = document.getElementById("closeModal");
+  const closeBtn = document.getElementById("closeBtn");
+  const volunteerListEl = document.getElementById("volunteerList");
+  const locationNameEl = document.getElementById("locationName");
 
   const map = L.map("map").setView([13.8, 124.2], 10);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -19,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
     attribution: "&copy; OpenStreetMap contributors"
   }).addTo(map);
 
-  // ---------- MARKERS ----------
   const locations = {
     "Virac": [13.584, 124.237],
     "San Andres": [13.598, 124.091],
@@ -31,47 +31,91 @@ document.addEventListener("DOMContentLoaded", () => {
     "Viga": [13.884, 124.300]
   };
 
-  for (const [town, coords] of Object.entries(locations)) {
+  Object.entries(locations).forEach(([town, coords]) => {
     const marker = L.marker(coords).addTo(map).bindPopup(`<b>${town}</b>`);
-    marker.on("click", () => {
-      showVolunteers(town);
-    });
+    marker.on("click", () => showVolunteersForLocation(town));
+  });
+
+  function showVolunteersForLocation(location) {
+    locationNameEl.textContent = location;
+
+    const volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
+    const filtered = volunteers.filter(v => v.deployedLocation === location);
+
+    if (!filtered.length) {
+      volunteerListEl.innerHTML = `
+        <p style="color:#666; text-align:center; padding:16px;">
+          No volunteers deployed in ${location}.
+        </p>
+      `;
+    } else {
+      volunteerListEl.innerHTML = filtered.map((v, i) => {
+        const age = getAge(v.dob) || "N/A";
+        const deployed = (v.deployedLocation === location);
+
+        return `
+          <div class="volunteer-card" data-index="${i}">
+            <div class="volunteer-summary">
+              <div>
+                <div class="name">${escapeHtml(v.fullName || "Unnamed")}</div>
+                <div class="sub">Age: ${age} • ${escapeHtml(v.sex || "N/A")}</div>
+              </div>
+              <div class="status">
+                <span class="status-dot ${deployed ? "deployed" : "not-deployed"}"></span>
+                <span>${deployed ? "Deployed" : "Not deployed"}</span>
+              </div>
+            </div>
+            <div class="volunteer-details">
+              <div><b>Mobile:</b> ${escapeHtml(v.mobile || "N/A")}</div>
+              <div><b>Address:</b> ${escapeHtml(v.address || "N/A")}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".volunteer-card").forEach(card => {
+        card.addEventListener("click", () => {
+          card.classList.toggle("expanded");
+        });
+      });
+    }
+
+    modal.classList.remove("hidden");
   }
 
-  function showVolunteers(location) {
-  const volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
-  const filtered = volunteers.filter(v => v.deployedLocation === location);
+  // ---------- MODAL HANDLING ----------
+  closeModalBtn.addEventListener("click", closeModal);
+  closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-  if (filtered.length === 0) {
-    volunteerList.innerHTML = `<p>No volunteers deployed in ${location}.</p>`;
-  } else {
-    volunteerList.innerHTML = filtered.map(v => `
-      <div class="volunteer-card">
-        <p><strong>Full Name:</strong> ${v.fullName}</p>
-        <p><strong>Address:</strong> ${v.address}</p>
-        <p><strong>Deployment Address:</strong> ${v.deployedLocation}</p>
-        <p><strong>Age:</strong> ${getAge(v.dob)}</p>
-        <p><strong>Cellphone:</strong> ${v.mobile}</p>
-        <p><strong>Email:</strong> ${v.email || "N/A"}</p>
-      </div>
-    `).join("");
+  function closeModal() {
+    modal.classList.add("hidden");
   }
-  modal.classList.remove("hidden");
-}
 
-
-  // Calculate age
+  // ---------- HELPERS ----------
   function getAge(dob) {
-    if (!dob) return "N/A";
+    if (!dob) return null;
     const birth = new Date(dob);
+    if (isNaN(birth.getTime())) return null;
+
     const today = new Date();
     let age = today.getFullYear() - birth.getFullYear();
     const m = today.getMonth() - birth.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
     return age;
   }
-  
-  closeModal.addEventListener("click", () => {
-    modal.classList.add("hidden");
-  });
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 });

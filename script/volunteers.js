@@ -21,16 +21,15 @@
 // });
 
 
-
 // ---------- SIDE NAV TOGGLE ----------
-
 const toggleBtn = document.getElementById("menu-toggle");
 const sidebar = document.getElementById("sidebar");
 
+// Toggle sidebar open/close when menu button is clicked
 toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("active");
-  
 });
+
 
 // ---------- MODAL HANDLING ----------
 function openModal() {
@@ -41,6 +40,7 @@ function closeModal() {
   document.getElementById("volunteerModal").style.display = "none";
 }
 
+
 // ---------- SAVE NEW VOLUNTEER ----------
 function saveVolunteer() {
   const name = document.getElementById("volName").value.trim();
@@ -48,7 +48,6 @@ function saveVolunteer() {
 
   if (name && location) {
     let volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
-
     const newVolunteer = {
       fullName: name,
       address: location,
@@ -58,7 +57,6 @@ function saveVolunteer() {
 
     volunteers.push(newVolunteer);
     localStorage.setItem("volunteers", JSON.stringify(volunteers));
-
     addVolunteerToTable(newVolunteer, volunteers.length - 1);
 
     closeModal();
@@ -67,8 +65,8 @@ function saveVolunteer() {
   }
 }
 
-// ---------- SEARCH VOLUNTEERS ----------
 
+// ---------- SEARCH VOLUNTEERS ----------
 document.getElementById("searchInput").addEventListener("keyup", function () {
   const filter = this.value.toLowerCase();
   const rows = document.querySelectorAll("#volunteerTable tbody tr");
@@ -84,25 +82,24 @@ document.getElementById("searchInput").addEventListener("keyup", function () {
 });
 
 
-
 // ---------- REMOVE VOLUNTEER ----------
 function removeVolunteer(index) {
   let volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
   volunteers.splice(index, 1);
   localStorage.setItem("volunteers", JSON.stringify(volunteers));
+
   renderTable();
 }
+
 
 // ---------- ADD ROW TO TABLE ----------
 function addVolunteerToTable(volunteer, index) {
   const table = document.getElementById("volunteerTable").querySelector("tbody");
   const row = document.createElement("tr");
-
   const deployed = volunteer.deployedLocation ? true : false;
   const statusDot = deployed 
     ? `<span class="status-dot deployed"></span>` 
     : `<span class="status-dot not-deployed"></span>`;
-
   row.innerHTML = `
     <td class="volunteer-name" data-index="${index}">${volunteer.fullName}</td>
     <td>${volunteer.deployedLocation || "Not deployed"}</td>
@@ -135,6 +132,7 @@ function renderTable() {
   });
 }
 
+
 // ---------- INFO MODAL ----------
 function openInfoModal(volunteer) {
   document.getElementById("infoName").textContent = volunteer.fullName;
@@ -149,19 +147,8 @@ function closeInfoModal() {
   document.getElementById("infoModal").style.display = "none";
 }
 
-function submitDeployment() {
-  const deployLocation = document.getElementById("deployLocation").value;
-  const name = document.getElementById("infoName").textContent;
 
-  if (deployLocation.trim() === "") {
-    alert("Please enter a deployment location.");
-    return;
-  }
-
-  alert(`${name} has been assigned to: ${deployLocation}`);
-  closeInfoModal();
-}
-
+// ---------- DEPLOY VOLUNTEER ----------
 function submitDeployment() {
   const deployLocation = document.getElementById("deployLocation").value;
   const name = document.getElementById("infoName").textContent;
@@ -180,7 +167,6 @@ function submitDeployment() {
   });
 
   localStorage.setItem("volunteers", JSON.stringify(updated));
-
   document.getElementById("successMessage").textContent = 
     `${name} has been deployed to: ${deployLocation}`;
   document.getElementById("successModal").style.display = "flex";
@@ -192,6 +178,7 @@ function submitDeployment() {
 function closeSuccessModal() {
   document.getElementById("successModal").style.display = "none";
 }
+
 
 // ---------- INITIALIZE ----------
 document.addEventListener("DOMContentLoaded", () => {

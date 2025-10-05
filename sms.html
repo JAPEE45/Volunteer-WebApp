@@ -1,60 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/sms.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMS Alerts</title>
+  <link rel="stylesheet" href="style/sms.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <div class="sidebar" id="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="logo">
       <img src="img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
     </div>
-    <a href="homePage.html">Dashboard</a>
-    <a href="volunteers.html">Volunteers</a>
-    <a href="events.html">Events</a>
-    <a href="map.html">Map</a>
-    <a href="#">SMS Alerts</a>
+    <a href="homePage.html"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
+    <a href="volunteers.html"><i class="fas fa-users fa-fw"></i> Volunteers</a>
+    <a href="events.html"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
+    <a href="map.html"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
+    <a href="#"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
   </div>
-
-  <div class="content">
-    <h1>SMS ALERT</h1>
-    
-
-  <table id="eventTable">
-    <thead>
-      <tr>
-        <th>TYPE</th>
-        <th>NAME</th>
-        <th>ACTION</th>
-      </tr>
-      <tr>
-        <td>Notification</td>
-        <td>New Volunteer Event</td>
-        <td><button class="delete-btn" onclick="removeRow(this)">🗑</button></td>
-      </tr>
-    </thead>
-    <tbody>
-      
-    </tbody>
-  </table>
 
   <button class="menu-toggle" id="menu-toggle">☰</button>
 
-   
+  <div class="content">
+    <h1>SMS Alerts</h1>
+
+    <table id="eventTable">
+      <thead>
+        <tr>
+          <th>TYPE</th>
+          <th>NAME</th>
+          <th>ACTION</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic rows load here -->
+      </tbody>
+    </table>
+  </div>
+
   <div id="volunteerModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal()">&times;</span>
       <h2>Volunteer Application</h2>
       <div id="volunteerDetails"></div>
       <div class="modal-actions">
+        <button id="downloadDocBtn">Download Application (DOC)</button>
         <button id="confirmBtn">Confirm</button>
         <button id="rejectBtn">Reject</button>
       </div>
     </div>
   </div>
 
+  <script src="script/sms.js"></script>
 </body>
-<script src="script/sms.js"></script>
-
 </html>
