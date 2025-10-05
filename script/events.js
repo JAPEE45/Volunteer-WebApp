@@ -19,16 +19,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   //--------- LOAD EVENTS ----------
-  function loadEvents() {
+  async function loadEvents() {
     tableBody.innerHTML = "";
-    let events = JSON.parse(localStorage.getItem("events")) || [];
-
+    const ev = await fetch("./utility/getEvent.php");
+    const events = await ev.json();
+    console.log(events)
     events.forEach((event, index) => {
       let row = document.createElement("tr");
       row.innerHTML = `
-        <td class="event-name">${event.name}</td>
+        <td class="event-name">${event.eventName}</td>
         <td>${event.location}</td>
-        <td><button class="delete-btn" data-index="${index}">🗑</button></td>
+        <td><button class="delete-btn" data-index="${event.id}">🗑</button></td>
       `;
 
       row.querySelector(".event-name").addEventListener("click", () => viewEvent(event));
@@ -63,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   //--------- SAVE NEW EVENT ----------
-  eventForm.addEventListener("submit", (e) => {
+  eventForm.addEventListener("submit", async(e) => {
     e.preventDefault();
 
     const newEvent = {
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
       location: document.getElementById("eventLocation").value,
       dateTime: document.getElementById("eventDateTime").value
     };
-
+    // await fetch("../utility/addEvent") 
     let events = JSON.parse(localStorage.getItem("events")) || [];
     events.push(newEvent);
     localStorage.setItem("events", JSON.stringify(events));
@@ -83,9 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //--------- VIEW EVENT ----------
   function viewEvent(event) {
-    document.getElementById("viewName").textContent = event.name;
+    document.getElementById("viewName").textContent = event.eventName;
     document.getElementById("viewLocation").textContent = event.location;
-    document.getElementById("viewDateTime").textContent = new Date(event.dateTime).toLocaleString();
+    document.getElementById("viewDateTime").textContent = new Date(event.date).toLocaleString();
     viewEventModal.classList.remove("hidden");
   }
 

@@ -56,7 +56,7 @@
         <input type="text" id="eventLocation" required>
         <label>Date & Time</label>
         <input type="datetime-local" id="eventDateTime" required>
-        <button type="submit">Save Event</button>
+        <button type="submit" id="saveEvent">Save Event</button>
       </form>
     </div>
   </div>

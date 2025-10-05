@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
         membershipType: document.getElementById("membershipType").value,
         trainings: document.getElementById("trainings").value,
         refName: document.getElementById("refName").value,
-        refContact: document.getElementById("refContact").value
+        refContact: document.getElementById("refContact").value,
+        age: document.getElementById("age").value
       };
 
       const files = document.getElementById("documents").files;
