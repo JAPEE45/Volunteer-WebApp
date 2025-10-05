@@ -1,3 +1,21 @@
+<?php
+      include_once "./utility/db.php";
+  if($_SERVER['REQUEST_METHOD'] == "POST"){
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+  $stmt = $conn->prepare("SELECT * from users WHERE username = ?");
+  $stmt->bind_param("s", $username);
+  if($stmt->execute()){
+    echo "goods";
+  }else{
+    echo "not good";
+  }
+  $stmt->close();
+  $conn->close();
+
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,9 +29,9 @@
     <div class="logo">
       <img src="img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
     </div>
-    <form onsubmit="return loginUser()">
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
+    <form action="" method="post">
+        <input type="text" id="username" placeholder="Username" name="username">
+        <input type="password" id="password" placeholder="Password" name="password">
         <button type="submit">Login</button>
     </form>
     <div class="social-login">
