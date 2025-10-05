@@ -9,17 +9,17 @@
 
 </head>
 <body>
-  <div class="sidebar" id="sidebar">
+ <div class="sidebar" id="sidebar">
     <div class="logo">
       <img src="img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
     </div>
-      <a href="homePage.html"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
-      <a href="#"><i class="fas fa-users fa-fw"></i> Volunteers</a>
-      <a href="events.html"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
-      <a href="map.html"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
-      <a href="sms.html"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
-  </div>
+    <a href="homePage.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
+    <a href="volunteers.php"><i class="fas fa-users fa-fw"></i> Volunteers</a>
+    <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
+    <a href="#"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
+    <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
 
+  </div>
   <button class="menu-toggle" id="menu-toggle">☰</button>
 
   <div class="content">

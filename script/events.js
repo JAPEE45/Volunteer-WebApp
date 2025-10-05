@@ -70,9 +70,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const newEvent = {
       name: document.getElementById("eventName").value,
       location: document.getElementById("eventLocation").value,
-      dateTime: document.getElementById("eventDateTime").value
+      dateTime: document.getElementById("eventDateTime").value,
+      latitude: document.getElementById("latitude").value,
+      longitude: document.getElementById("longitude").value
     };
-    // await fetch("../utility/addEvent") 
+    const a = await fetch("./utility/addEvent.php",{
+      method:"POST",
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(newEvent)
+    }) 
+    const j = await a.json();
+    console.log(j)
     let events = JSON.parse(localStorage.getItem("events")) || [];
     events.push(newEvent);
     localStorage.setItem("events", JSON.stringify(events));

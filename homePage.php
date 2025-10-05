@@ -9,15 +9,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-  <div class="sidebar" id="sidebar">
+ <div class="sidebar" id="sidebar">
     <div class="logo">
       <img src="img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
     </div>
-    <a href="#"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
-    <a href="volunteers.html"><i class="fas fa-users fa-fw"></i> Volunteers</a>
-    <a href="events.html"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
-    <a href="map.html"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
-    <a href="sms.html"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
+    <a href="homePage.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
+    <a href="volunteers.php"><i class="fas fa-users fa-fw"></i> Volunteers</a>
+    <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
+    <a href="#"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
+    <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
 
   </div>
 
