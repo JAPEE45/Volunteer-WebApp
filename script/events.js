@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       row.querySelector(".delete-btn").addEventListener("click", (e) => {
         e.stopPropagation(); 
-        deleteEvent(index);
+        deleteEvent(event.id);
       });
 
       tableBody.appendChild(row);
@@ -44,11 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   //--------- DELETE EVENT ----------
-  function deleteEvent(index) {
-    let events = JSON.parse(localStorage.getItem("events")) || [];
+  async function deleteEvent(index) {
     if (confirm("Are you sure you want to delete this event?")) {
-      events.splice(index, 1);
-      localStorage.setItem("events", JSON.stringify(events));
+      const res = await fetch(`./utility/deleteEvent.php?eventId=${index}`)
+      const j = await res.json();
+      console.log(j)
       loadEvents();
     }
   }

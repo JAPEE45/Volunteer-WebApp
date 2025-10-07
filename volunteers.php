@@ -16,7 +16,7 @@
     <a href="homePage.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
     <a href="volunteers.php"><i class="fas fa-users fa-fw"></i> Volunteers</a>
     <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
-    <a href="#"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
+    <a href="map.php"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
     <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
 
   </div>
@@ -39,12 +39,12 @@
           <th>Status</th>
           <th></th>
         </tr>
-        <tr>
+        <!-- <tr>
         <td>Maria Isabel D. Rebanal</td>
         <td>Virac, Catanduanes, Philippines</td>
         <td></td>
         <td><button class="delete-btn" onclick="removeRow(this)">🗑</button></td>
-      </tr>
+      </tr> -->
       </thead>
       <tbody>
         
@@ -99,6 +99,74 @@
     </div>
   </div>
 
+<!-- VOLUNTEER DETAILS MODAL -->
+<div id="userModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2 id="modalTitle">Volunteer Details</h2>
+    <div id="userDetails" class="details-container"></div>
+
+    <div class="modal-actions">
+      <button id="confirmBtn" class="confirm-btn">Confirm</button>
+      <button id="rejectBtn" class="reject-btn">Reject</button>
+      <button onclick="closeUserModal()" class="close-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.modal-content {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+.details-container p {
+  margin: 6px 0;
+}
+.details-container strong {
+  color: #333;
+}
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.confirm-btn {
+  background: #4CAF50;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.reject-btn {
+  background: #E53935;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.close-btn {
+  background: #757575;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+</style>
 
 </body>
  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

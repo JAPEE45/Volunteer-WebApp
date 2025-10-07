@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     attribution: "&copy; OpenStreetMap contributors"
   }).addTo(map);
 
-  const locations = {
+  let locations = {
     "Virac": [13.584, 124.237],
     "San Andres": [13.598, 124.091],
     "Pandan": [14.058, 124.167],
@@ -31,16 +31,31 @@ document.addEventListener("DOMContentLoaded", () => {
     "Viga": [13.884, 124.300]
   };
 
-  Object.entries(locations).forEach(([town, coords]) => {
+async function renderEventLocation(){
+  const res = await fetch("./utility/mapLocation.php");
+  const j = await res.json()
+  locations = {}
+  j.forEach(e=>{
+    locations[e.eventName] = [e.latitude, e.longitude]
+  })
+  console.log(j)
+    Object.entries(locations).forEach(([town, coords]) => {
     const marker = L.marker(coords).addTo(map).bindPopup(`<b>${town}</b>`);
     marker.on("click", () => showVolunteersForLocation(town));
   });
 
-  function showVolunteersForLocation(location) {
+
+}
+renderEventLocation()
+  async function showVolunteersForLocation(location) {
     locationNameEl.textContent = location;
 
-    const volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
-    const filtered = volunteers.filter(v => v.deployedLocation === location);
+    // const volunteers = JSON.parse(localStorage.getItem("volunteers")) || [];
+    const v = await fetch("./utility/getAllVolunteer.php");
+    const volunteers = await v.json()
+    console.log(volunteers)
+    const filtered = volunteers.filter(v => v.eventName == location);
+    console.log(filtered)
 
     if (!filtered.length) {
       volunteerListEl.innerHTML = `
@@ -58,11 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="volunteer-summary">
               <div>
                 <div class="name">${escapeHtml(v.fullName || "Unnamed")}</div>
-                <div class="sub">Age: ${age} • ${escapeHtml(v.sex || "N/A")}</div>
+                <div class="sub">Age: ${v.age} • ${v.sex || 'N/A'}</div>
               </div>
               <div class="status">
                 <span class="status-dot ${deployed ? "deployed" : "not-deployed"}"></span>
-                <span>${deployed ? "Deployed" : "Not deployed"}</span>
+                <span>${v.status}</span>
               </div>
             </div>
             <div class="volunteer-details">

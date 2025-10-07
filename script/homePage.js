@@ -18,28 +18,40 @@ toggleBtn.addEventListener("click", () => {
 });
 
 //--------- PIE CHART ----------
-const volunteersCtx = document.getElementById("volunteersChart").getContext("2d");
-new Chart(volunteersCtx, {
-  type: "pie",
-  data: {
-    labels: ["Deployed", "Not Deployed"],
-    datasets: [{
-      data: [70, 30],
-      backgroundColor: ["#28a745", "#dc3545"]
-    }]
-  },
-  options: { responsive: true }
-});
+async function depStatus(){
+    const res = await fetch("./utility/getDeployCount.php");
+  const j = await res.json()
+  let mt = Object.keys(j)
+  let dt =Object.values(j)
+  console.log(j)
+  const volunteersCtx = document.getElementById("volunteersChart").getContext("2d");
+  new Chart(volunteersCtx, {
+    type: "pie",
+    data: {
+      labels: ["Deployed", "Not Deployed"],
+      datasets: [{
+        data: dt,
+        backgroundColor: ["#28a745", "#dc3545"]
+      }]
+    },
+    options: { responsive: true }
+  });
 
-//--------- BAR CHART ----------
+}
+depStatus()
+async function barGraph() {
+  const res = await fetch("./utility/getUpcomingEvent.php");
+  const j = await res.json()
+  let mt = Object.keys(j[0])
+  let dt =Object.values(j[0])
 const eventsCtx = document.getElementById("eventsChart").getContext("2d");
 new Chart(eventsCtx, {
   type: "bar",
   data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    labels: mt,
     datasets: [{
       label: "Events",
-      data: [2, 4, 3, 6, 5, 7],
+      data: dt,
       backgroundColor: "#b30000"
     }]
   },
@@ -49,6 +61,8 @@ new Chart(eventsCtx, {
   }
 });
 
+}
+barGraph()
 //--------- LINE CHART ----------
 const smsCtx = document.getElementById("smsChart").getContext("2d");
 new Chart(smsCtx, {
@@ -69,3 +83,36 @@ new Chart(smsCtx, {
     scales: { y: { beginAtZero: true } }
   }
 });
+
+
+async function loadEvents() {
+  try {
+    const response = await fetch('./utility/getEventHomepage.php');
+    const events = await response.json();
+
+    const table = document.querySelector(".event-calendar table");
+    const rows = table.querySelectorAll("tr:not(:first-child)");
+    rows.forEach(r => r.remove()); // Clear old rows
+
+    events.forEach(e => {
+      const tr = document.createElement("tr");
+      const eventDate = new Date(e.date);
+
+      // Format date to something like "22 May 2025"
+      const formattedDate = eventDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      tr.innerHTML = `
+        <td>${formattedDate}</td>
+        <td>${e.eventName}</td>
+        <td>${e.location}</td>
+      `;
+      table.appendChild(tr);
+    });
+
+  } catch (error) {
+    console.error("Failed to load events:", error);
+  }
+}
+
+// Run on page load
+loadEvents();

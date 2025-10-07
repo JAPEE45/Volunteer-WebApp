@@ -18,7 +18,7 @@
     <a href="homePage.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
     <a href="volunteers.php"><i class="fas fa-users fa-fw"></i> Volunteers</a>
     <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
-    <a href="#"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
+    <a href="map.php"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
     <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
 
   </div>
@@ -38,11 +38,6 @@
         <th>EVENT NAME</th>
         <th>LOCATION</th>
         <th>ACTION</th>
-      </tr>
-      <tr>
-        <td>Maria Isabel D. Rebanal</td>
-        <td>Virac, Catanduanes, Philippines</td>
-        <td><button class="delete-btn" onclick="removeRow(this)">🗑</button></td>
       </tr>
     </thead>
     <tbody>
@@ -107,8 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const latitudeInput = document.getElementById("latitude");
 
   let map, marker, selectedCoords;
-
-  // Open map modal
   mapModalBtn.addEventListener("click", function () {
     mapModal.classList.remove("hidden");
 
