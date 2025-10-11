@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/events.css">
     <link
   rel="stylesheet"
   href="https://unpkg.com/leaflet/dist/leaflet.css"
 />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style/events.css">
+    
 </head>
 <body>
     <div class="sidebar" id="sidebar">
@@ -17,9 +18,11 @@
     </div>
     <a href="homePage.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
     <a href="volunteers.php"><i class="fas fa-users fa-fw"></i> Volunteers</a>
+        <a href="accounts.php"><i class="fas fa-users fa-fw"></i>Accounts</a>
     <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
     <a href="map.php"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
-    <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
+    <a href="login.php"><i class="fas fa-map-marker-alt fa-fw"></i>Logout</a>
+    <!-- <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a> -->
 
   </div>
 
@@ -87,6 +90,23 @@
       <button id="okBtn">OK</button>
     </div>
   </div>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const toggle = document.getElementById('menu-toggle');
+      
+      if (window.innerWidth <= 768 && 
+          !sidebar.contains(event.target) && 
+          !toggle.contains(event.target) && 
+          sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+      }
+    });
+  </script>
 </body>
 
 
@@ -100,19 +120,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const useLocationBtn = document.getElementById("useLocationBtn");
   const longitudeInput = document.getElementById("longitude");
   const latitudeInput = document.getElementById("latitude");
-
+  longitudeInput.disabled = true
+  latitudeInput.disabled = true
   let map, marker, selectedCoords;
   mapModalBtn.addEventListener("click", function () {
     mapModal.classList.remove("hidden");
 
     if (!map) {
-      map = L.map("map").setView([13.7089, 124.2422], 10); // Center on Catanduanes
+      map = L.map("map").setView([13.7089, 124.2422], 10);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map);
-
-      // On map click, set marker and save coords
       map.on("click", function (e) {
         const { lat, lng } = e.latlng;
         selectedCoords = { lat, lng };
@@ -130,12 +149,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 200);
   });
 
-  // Close map modal
   closeMapModal.addEventListener("click", function () {
     mapModal.classList.add("hidden");
   });
-
-  // Use selected location
   useLocationBtn.addEventListener("click", function () {
     if (selectedCoords) {
       latitudeInput.value = selectedCoords.lat.toFixed(6);

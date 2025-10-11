@@ -349,16 +349,18 @@ function addVolunteerToTable(volunteer, index) {
   const statusDot = deployed 
     ? `<span class="status-dot deployed"></span>` 
     : `<span class="status-dot not-deployed"></span>`;
-  const ntm = volunteer.account_status == "accepted"
+  const isRejected = volunteer.account_status === "rejected";
+  const ntm = volunteer.account_status === "accepted"
   ? `<button class="accept-btn" onclick="deployNow(${volunteer.id})">Deploy</button>`
   : `<button class="delete-btn" onclick="removeVolunteer(${volunteer.id})">🗑</button>`
   row.innerHTML = `
-    <td class="volunteer-name" data-index="${index}">${volunteer.fullName}</td>
-    <td>${volunteer.deployedLocation || "Not deployed"}</td>
-    <td>${statusDot}</td>
-    <td>${ntm}</td>
-  `;
+    <td class="volunteer-name" style="${isRejected ? 'filter: blur(3px); pointer-events: none;' : ''}"  data-index="${index}">${volunteer.fullName.toUpperCase()}</td>
+    <td style='padding-inline:20px;'>${volunteer.deployedLocation && !isRejected ? volunteer.deployedLocation :"Not deployed"}</td>
+  <td style='text-align:center;width:100px;'>${statusDot} <span class="status-text"></span></td>
+    <td style='padding:10px'>${isRejected ? '😔' : ntm}</td>
 
+  `;
+ 
   table.appendChild(row);
 }
 
@@ -368,19 +370,38 @@ async function renderTable() {
   const tbody = document.getElementById("volunteerTable").querySelector("tbody");
   tbody.innerHTML = "";
 
-  const res = await fetch("./utility/getAllVolunteer.php")
-  const j = await res.json()
-  console.log(j)
-  j.forEach((volunteer, index) => {
+  const res = await fetch("./utility/getAllVolunteer.php");
+  const all = await res.json();
+  console.log(all);
+
+  // Determine filter value
+  const statusFilter = document.getElementById("statusFilter");
+  const filterValue = statusFilter ? (statusFilter.value || 'all').toLowerCase() : 'all';
+
+  // Filter volunteers by account_status when requested
+  let filtered = all;
+  const normalize = s => (s === null || s === undefined) ? '' : String(s).toLowerCase().trim();
+  if (filterValue === 'accepted') {
+    filtered = all.filter(v => normalize(v.account_status).includes('accept') || normalize(v.account_status).includes('active'));
+  } else if (filterValue === 'rejected') {
+    filtered = all.filter(v => normalize(v.account_status).includes('reject') || normalize(v.account_status).includes('decline'));
+  } else if (filterValue === 'pending') {
+    filtered = all.filter(v => normalize(v.account_status).includes('pending') || normalize(v.account_status) === 'pending');
+  }
+
+  // Render filtered list
+  filtered.forEach((volunteer, index) => {
     addVolunteerToTable(volunteer, index);
   });
 
+  // Wire click handlers to open the correct (filtered) item
   document.querySelectorAll(".volunteer-name").forEach(td => {
     td.style.cursor = "pointer";
     td.addEventListener("click", () => {
-      const idx = td.getAttribute("data-index");
-
-      openInfoModal(j[idx]);
+      const idx = parseInt(td.getAttribute("data-index"), 10);
+      if (!Number.isNaN(idx)) {
+        openInfoModal(filtered[idx]);
+      }
     });
   });
 }
@@ -823,7 +844,7 @@ async function openInfoModal(volunteer) {
     <div class="modal-section">
       <h3 class="section-title">Status</h3>
       <div class="status-container">
-        <div class="status-badge ${data.account_status === 'active' ? 'active' : data.account_status === 'pending' ? 'pending' : 'inactive'}">
+        <div class="status-badge ${data.account_status === 'accepted' ? 'active' : data.account_status === 'pending' ? 'pending' : 'inactive'}">
           <span class="status-indicator"></span>
           <span>Account: ${data.account_status || 'Unknown'}</span>
         </div>
@@ -845,8 +866,8 @@ async function openInfoModal(volunteer) {
      acpt.style.display = "inline";
     rjct.style.display = "inline"
   }
-  acpt.onclick = () => updateStatus(data.id, "deployed");
-  rjct.onclick = () => updateStatus(data.id, "not deployed");
+  acpt.onclick = () => updateStatus(data.id, "accepted", "");
+  rjct.onclick = () => openReasonModal(data.id);
 
   document.getElementById("userModal").style.display = "flex";
 }
@@ -855,11 +876,11 @@ function closeUserModal() {
   document.getElementById("userModal").style.display = "none";
 }
 
-async function updateStatus(id, status) {
+async function updateStatus(id, status, reason) {
   const res = await fetch("./utility/updateVolunteerStatus.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, status })
+    body: JSON.stringify({ id, status, reason })
   });
   const msg = await res.text();
   alert(msg);
@@ -871,4 +892,173 @@ async function updateStatus(id, status) {
 // ---------- INITIALIZE ----------
 document.addEventListener("DOMContentLoaded", () => {
   renderTable();
+  const statusFilter = document.getElementById('statusFilter');
+  if (statusFilter) {
+    statusFilter.addEventListener('change', () => {
+      renderTable();
+    });
+  }
 });
+
+
+
+document.addEventListener('click', function(event) {
+  const modalOverlay = document.getElementById('deployModalOverlay');
+  if (event.target === modalOverlay) {
+    closeDeployModal();
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeDeployModal();
+  }
+});
+
+// ---------- REASON MODAL ----------
+const reasonModalHTML = `
+  <div id="reasonModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); max-width: 500px; width: 90%; position: relative;">
+      
+      <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 2rem; position: relative; overflow: hidden; border-radius: 20px 20px 0 0;">
+        <div style="position: absolute; font-size: 8rem; opacity: 0.1; right: -20px; top: -20px; transform: rotate(15deg); pointer-events: none;">✕</div>
+        
+        <button onclick="closeReasonModal()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255, 255, 255, 0.2); border: 2px solid white; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; line-height: 1;">&times;</button>
+        
+        <h2 style="margin: 0; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem;">
+          <span style="font-size: 2rem;">⚠️</span>
+          <span>Specify Reason</span>
+        </h2>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.9;">Please provide a reason for rejection</p>
+      </div>
+      
+      <div style="padding: 2rem;">
+        <div style="margin-bottom: 0;">
+          <label for="reasonInput" style="display: block; font-size: 0.9rem; font-weight: 700; color: #2d3748; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
+            <span style="color: #ef4444; font-size: 1.2rem; margin-right: 0.5rem;">▪</span>
+            <span>Reason for Rejection</span>
+          </label>
+          <textarea id="reasonInput" rows="4" placeholder="Enter your reason here..." style="width: calc(100% - 2rem); padding: 1rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-weight: 500; color: #2d3748; background: white; resize: vertical; min-height: 100px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; transition: all 0.3s ease; box-sizing: border-box;"></textarea>
+        </div>
+      </div>
+      
+      <div style="padding: 1.5rem 2rem; background: #f7fafc; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; justify-content: flex-end; border-radius: 0 0 20px 20px;">
+        <button onclick="closeReasonModal()" style="padding: 0.875rem 2rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem; background: white; color: #64748b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;">
+          <span>✕</span>
+          <span>Cancel</span>
+        </button>
+        <button onclick="submitReason()" style="padding: 0.875rem 2rem; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;">
+          <span>✓</span>
+          <span>Submit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    #reasonModalOverlay {
+      animation: reasonModalFadeIn 0.3s ease;
+    }
+    
+    #reasonModalOverlay.active {
+      display: flex !important;
+    }
+    
+    #reasonModalOverlay.active > div {
+      animation: reasonModalSlideUp 0.4s ease;
+    }
+    
+    @keyframes reasonModalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes reasonModalSlideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    #reasonModalOverlay button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    #reasonInput:focus {
+      outline: none;
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+      #reasonModalOverlay > div {
+        width: 95% !important;
+      }
+      
+      #reasonModalOverlay > div > div:first-child {
+        padding: 1.5rem !important;
+      }
+      
+      #reasonModalOverlay > div > div:nth-child(2) {
+        padding: 1.5rem !important;
+      }
+      
+      #reasonModalOverlay > div > div:last-child {
+        flex-direction: column !important;
+        padding: 1rem 1.5rem !important;
+      }
+      
+      #reasonModalOverlay button {
+        width: 100% !important;
+        justify-content: center !important;
+      }
+      
+      #reasonInput {
+        width: calc(100% - 2rem) !important;
+      }
+    }
+  </style>
+`;
+
+
+// Add reason modal to body
+document.addEventListener('DOMContentLoaded', function() {
+  const reasonModalContainer = document.createElement('div');
+  reasonModalContainer.innerHTML = reasonModalHTML;
+  document.body.appendChild(reasonModalContainer);
+});
+
+// Store volunteer ID for rejection
+let rejectVolunteerId = null;
+
+// Function to open reason modal
+function openReasonModal(volunteerId) {
+  rejectVolunteerId = volunteerId;
+  document.getElementById('reasonInput').value = '';
+  document.getElementById('reasonModalOverlay').classList.add('active');
+}
+
+// Function to close reason modal
+function closeReasonModal() {
+  document.getElementById('reasonModalOverlay').classList.remove('active');
+  rejectVolunteerId = null;
+}
+
+// Function to submit reason
+async function submitReason() {
+  const reason = document.getElementById('reasonInput').value.trim();
+  
+  if (!reason) {
+    alert('Please enter a reason for rejection');
+    return;
+  }
+  
+  if (!rejectVolunteerId) {
+    alert('No volunteer selected');
+    return;
+  }
+  
+  // Proceed with rejection
+  await updateStatus(rejectVolunteerId, 'rejected', reason);
+  closeReasonModal();
+}
