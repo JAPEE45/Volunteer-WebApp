@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.sidebar {
+    position: fixed;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: #fff;
+    color: #fff;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar .logo {
+    padding: 20px;
+    text-align: center;
+    background: #c8102e;
+}
+
+.sidebar .logo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.sidebar a {
+    display: block;
+    padding: 15px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    border-left: 3px solid transparent;
+}
+
+.sidebar a:hover, .sidebar a.active {
+    background: #f4f7f6;
+    color: #c8102e;
+    border-left: 3px solid #c8102e;
+}
+
+.sidebar a i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    background: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 1001;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.content {
+    margin-left: 0;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+.content.active {
+    margin-left: 250px;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h1 {
+    font-weight: 600;
+    color: #333;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-container input {
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: #c8102e;
+    box-shadow: 0 0 5px rgba(200, 16, 46, 0.2);
+}
+
+#volunteerTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#volunteerTable th, #volunteerTable td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#volunteerTable th {
+    background: #f9f9f9;
+    font-weight: 500;
+    color: #555;
+}
+
+#volunteerTable tbody tr:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+#volunteerTable tbody tr {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.info-modal, .success-modal, .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeInModal 0.3s;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.info-modal-content, .success-modal-content, .modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); }
+    to { transform: translateY(0); }
+}
+
+.info-modal h3, .success-modal h3, .modal h2 {
+    margin-top: 0;
+    color: #c8102e;
+    font-weight: 600;
+}
+
+.info-modal p, .details-container p {
+    margin: 10px 0;
+}
+
+#deployLocation {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.info-modal-buttons, .modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.submit-btn, .close-btn, .confirm-btn, .reject-btn, .success-modal button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.submit-btn, .confirm-btn {
+    background-color: #c8102e;
+    color: white;
+}
+
+.submit-btn:hover, .confirm-btn:hover {
+    background-color: #a60c26;
+}
+
+.close-btn, .reject-btn {
+    background-color: #757575;
+    color: white;
+}
+
+.close-btn:hover, .reject-btn:hover {
+    background-color: #5e5e5e;
+}
+
+.success-modal button {
+    background-color: #c8102e;
+    color: white;
+}

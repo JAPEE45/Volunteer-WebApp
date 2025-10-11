@@ -3,20 +3,25 @@
   if($_SERVER['REQUEST_METHOD'] == "POST"){
   $username = $_POST['username'];
   $password = $_POST['password'];
-  $stmt = $conn->prepare("SELECT * from users WHERE username = ?");
+  $stmt = $conn->prepare("SELECT a.password, a.user_type, u.id as user_id FROM account a LEFT JOIN users u ON a.user_id = u.id WHERE a.username = ?");
   $stmt->bind_param("s", $username);  
   $stmt->execute();
   $res = $stmt->get_result();
   if($res->num_rows > 0){
     $r = $res->fetch_assoc();
-    if($r['user_type'] == 'admin'){
+
+    if($r['user_type'] == 'admin' && $password == $r['password']){
       header("Location: /Volunteer-WebApp/homepage.php");
       exit();
       echo "jo";
-    }elseif($r['user_type'] == 'volunteer'){
+    }elseif($r['user_type'] == 'volunteer' && $password == $r['password']){
+      session_start();
+      $_SESSION['user_id'] = $r['user_id'];
+      $_SESSION['hi']= "eee";
       header("Location: /Volunteer-WebApp/profile/profile.php");
       exit();
     }
+    echo $r['user_type'];
   }else{
     echo "not good";
   }

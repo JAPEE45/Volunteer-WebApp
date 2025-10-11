@@ -11,9 +11,9 @@
     <div class="logo">
       <img src="../img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
     </div>
-    <a href="../profile/profile.html">Profile</a>
-    <a href="../profile/profileMap.html">Map</a>
-    <a href="../profile/profileSms.html">Sms</a>
+    <a href="../profile/profile.php">Profile</a>
+    <a href="../profile/profileMap.php">Map</a>
+    <a href="../profile/profileSms.php">Sms</a>
     <a href="#" class="active">Report</a>
   </div>
 

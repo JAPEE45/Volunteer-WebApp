@@ -17,7 +17,7 @@
     <a href="volunteers.php"><i class="fas fa-users fa-fw"></i> Volunteers</a>
     <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
     <a href="#"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
-    <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a>
+     <a href="index.php"><i class="fas fa-envelope fa-fw"></i>Logout</a>
 
   </div>
 

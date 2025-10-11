@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Cross | Hope in Action</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        /* --- Basic Reset & Global Styles --- */
+        :root {
+            --primary-color: #d92027; /* A strong red */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background-color: #fff;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        /* --- Navigation Bar --- */
+        .navbar {
+            background: transparent;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            transition: background-color 0.4s ease;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .navbar .logo {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .navbar.scrolled {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .navbar.scrolled .logo,
+        .navbar.scrolled .nav-links a {
+            color: var(--dark-color);
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 20px;
+        }
+
+        .navbar .nav-links a {
+            color: #fff;
+            padding: 5px 10px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .navbar.scrolled .nav-links a:hover {
+            color: #d92027;
+        }
+
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1593113646773-463c68a9a234?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            height: 100vh;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1593113646773-463c68a9a234?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            animation: zoom-in 20s ease-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes zoom-in {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        .hero-content {
+            max-width: 600px;
+            animation: fade-in 1.5s ease-in-out;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* --- Services Section --- */
+        .services {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .services h2 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+        }
+
+        .service-cards {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 250px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            border: 1px solid #eee;
+        }
+
+        .card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* --- Responsive Design --- */
+        @media(max-width: 768px) {
+            .navbar .container {
+                flex-direction: column;
+                height: auto;
+                padding: 15px 0;
+            }
+
+            .navbar .nav-links {
+                margin-top: 10px;
+            }
+            
+            .navbar .btn {
+                margin-top: 15px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .service-cards {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="logo">Red Cross</a>
+                <ul class="nav-links">
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#services">Our Work</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <a href="#donate" class="btn btn-primary donate-btn">Donate Now</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Your Help is Hope</h1>
+                <p>Join us in providing relief and support to communities in need. Every contribution makes a difference.</p>
+                <a href="#donate" class="btn btn-primary donate-btn">Make a Donation</a>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h2>What We Do</h2>
+                <div class="service-cards">
+                    <div class="card">
+                        <i class="fas fa-hands-helping"></i>
+                        <h3>Disaster Relief</h3>
+                        <p>Providing immediate assistance to those affected by natural disasters, offering shelter, food, and medical care.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-tint"></i>
+                        <h3>Blood Services</h3>
+                        <p>Managing the nation's blood supply to ensure it's available for patients in need of transfusions.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-heartbeat"></i>
+                        <h3>Community Health</h3>
+                        <p>Promoting health and safety through education, training programs, and local health initiatives.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <p>&copy; 2025 Red Cross Philippines. All Rights Reserved.</p>
+            <p>Made with ❤️ in Masbate City.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Change navbar style on scroll
+            const navbar = document.querySelector('.navbar');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Add click event to all donate buttons
+            const donateButtons = document.querySelectorAll('.donate-btn');
+
+            donateButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevents the link from jumping to the #donate anchor
+                    alert('Thank you for your interest in donating! This would lead to a payment gateway in a real application.');
+                });
+            });
+
+            // Reveal cards on scroll
+            const cards = document.querySelectorAll('.card');
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+
+        });
+    </script>
+</body>
+</html>

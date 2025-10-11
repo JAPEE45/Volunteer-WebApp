@@ -63,6 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(j);
 
   alert("Registration submitted! Awaiting approval in SMS Alerts.");
+    setTimeout(() => {
+      window.location.href = "/Volunteer-webapp/"
+    }, 5000);
 });
 
   }
