@@ -22,9 +22,143 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Setup evaluation form handlers
+  setupEvaluationForm();
+
   // load table
   renderTable();
 });
+
+// Setup evaluation form with live rating updates
+function setupEvaluationForm() {
+  const ratingInputs = ['physicalFitness', 'communicationSkills', 'teamwork', 'reliability'];
+  
+  ratingInputs.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener('input', (e) => {
+        const value = parseFloat(e.target.value).toFixed(1);
+        e.target.nextElementSibling.textContent = value;
+        updateOverallRating();
+      });
+    }
+  });
+
+  // Handle evaluation form submission
+  const evalForm = document.getElementById('evaluationForm');
+  if (evalForm) {
+    evalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await submitEvaluation();
+    });
+  }
+}
+
+// Calculate and update overall rating
+function updateOverallRating() {
+  const pf = parseFloat(document.getElementById('physicalFitness').value);
+  const cs = parseFloat(document.getElementById('communicationSkills').value);
+  const tw = parseFloat(document.getElementById('teamwork').value);
+  const rel = parseFloat(document.getElementById('reliability').value);
+  
+  const overall = ((pf + cs + tw + rel) / 4).toFixed(1);
+  document.getElementById('overallRating').textContent = overall;
+  
+  // Update stars
+  const stars = Math.round(overall);
+  let starsHtml = '';
+  for (let i = 1; i <= 5; i++) {
+    starsHtml += i <= stars ? '★' : '☆';
+  }
+  document.getElementById('ratingStars').textContent = starsHtml;
+}
+
+// Submit evaluation
+async function submitEvaluation() {
+  const userId = document.getElementById('evalUserId').value;
+  const data = {
+    user_id: userId,
+    physical_fitness: parseFloat(document.getElementById('physicalFitness').value),
+    communication_skills: parseFloat(document.getElementById('communicationSkills').value),
+    teamwork: parseFloat(document.getElementById('teamwork').value),
+    reliability: parseFloat(document.getElementById('reliability').value),
+    comments: document.getElementById('evaluationComments').value
+  };
+
+  try {
+    const res = await fetch('./utility/saveEvaluation.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    
+    if (result.success) {
+      alert('Evaluation saved successfully! Overall rating: ' + result.overall_rating.toFixed(1));
+      closeEvaluationModal();
+      // Reload user modal to show evaluation
+      openUserModal(userId);
+    } else {
+      alert('Failed to save evaluation: ' + result.message);
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error saving evaluation');
+  }
+}
+
+// Open evaluation modal
+async function openEvaluationModal(userId) {
+  document.getElementById('evalUserId').value = userId;
+  
+  // Try to load existing evaluation
+  try {
+    const res = await fetch(`./utility/getEvaluation.php?user_id=${userId}`);
+    const result = await res.json();
+    
+    if (result.success && result.evaluation) {
+      const evaluation = result.evaluation;
+      document.getElementById('physicalFitness').value = evaluation.physical_fitness;
+      document.getElementById('communicationSkills').value = evaluation.communication_skills;
+      document.getElementById('teamwork').value = evaluation.teamwork;
+      document.getElementById('reliability').value = evaluation.reliability;
+      document.getElementById('evaluationComments').value = evaluation.comments || '';
+      
+      // Update displayed values
+      document.querySelector('#physicalFitness + .rating-value').textContent = parseFloat(evaluation.physical_fitness).toFixed(1);
+      document.querySelector('#communicationSkills + .rating-value').textContent = parseFloat(evaluation.communication_skills).toFixed(1);
+      document.querySelector('#teamwork + .rating-value').textContent = parseFloat(evaluation.teamwork).toFixed(1);
+      document.querySelector('#reliability + .rating-value').textContent = parseFloat(evaluation.reliability).toFixed(1);
+      
+      updateOverallRating();
+    } else {
+      // Reset to defaults for new evaluation
+      resetEvaluationForm();
+    }
+  } catch (err) {
+    console.error(err);
+    resetEvaluationForm();
+  }
+  
+  document.getElementById('evaluationModal').style.display = 'flex';
+}
+
+// Reset evaluation form to defaults
+function resetEvaluationForm() {
+  const inputs = ['physicalFitness', 'communicationSkills', 'teamwork', 'reliability'];
+  inputs.forEach(id => {
+    document.getElementById(id).value = 3;
+    document.querySelector(`#${id} + .rating-value`).textContent = '3.0';
+  });
+  document.getElementById('evaluationComments').value = '';
+  updateOverallRating();
+}
+
+// Close evaluation modal
+function closeEvaluationModal() {
+  document.getElementById('evaluationModal').style.display = 'none';
+}
+
 
 async function renderTable() {
   const tbody = document.querySelector('#accountsTable tbody');
@@ -38,7 +172,6 @@ async function renderTable() {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="username">${u.username || ''}</td>
-  <td class="password" data-password="${u.password || ''}">••••••</td>
         <td class="created">${u.createdAt || ''}</td>
         <td class="lastLogin">${u.lastLogin || ''}</td>
         <td class="role">${u.account_type || ''}</td>
@@ -65,6 +198,61 @@ async function openUserModal(id) {
   try {
     const res = await fetch(`./utility/getVolunteerDetails.php?id=${id}`);
     const data = await res.json();
+
+    // Check for evaluation
+    let evaluationHtml = '';
+    let hasEvaluation = false;
+    try {
+      const evalRes = await fetch(`./utility/getEvaluation.php?user_id=${id}`);
+      const evalData = await evalRes.json();
+      
+      if (evalData.success && evalData.evaluation) {
+        hasEvaluation = true;
+        const evaluation = evalData.evaluation;
+        const stars = '★'.repeat(Math.round(evaluation.overall_rating)) + '☆'.repeat(5 - Math.round(evaluation.overall_rating));
+        evaluationHtml = `
+  <!-- Evaluation Results -->
+  <div class="detail-section">
+    <h3 class="section-header">Evaluation Results</h3>
+    <div class="detail-grid">
+      <div class="detail-item">
+        <div class="detail-label">Physical Fitness</div>
+        <div class="detail-value">${parseFloat(evaluation.physical_fitness).toFixed(1)} / 5.0</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Communication Skills</div>
+        <div class="detail-value">${parseFloat(evaluation.communication_skills).toFixed(1)} / 5.0</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Teamwork</div>
+        <div class="detail-value">${parseFloat(evaluation.teamwork).toFixed(1)} / 5.0</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Reliability</div>
+        <div class="detail-value">${parseFloat(evaluation.reliability).toFixed(1)} / 5.0</div>
+      </div>
+      <div class="detail-item" style="grid-column: 1 / -1; text-align: center; background: linear-gradient(135deg, #dc143c 0%, #a00000 100%); color: white; padding: 20px;">
+        <div class="detail-label" style="color: white;">Overall Rating</div>
+        <div style="font-size: 2.5rem; font-weight: 700; margin: 10px 0;">${parseFloat(evaluation.overall_rating).toFixed(1)}</div>
+        <div style="font-size: 1.5rem; letter-spacing: 3px;">${stars}</div>
+        <div style="margin-top: 10px; font-size: 0.9rem;">Status: <strong>${evaluation.status.toUpperCase()}</strong></div>
+      </div>
+      ${evaluation.comments ? `
+      <div class="detail-item" style="grid-column: 1 / -1;">
+        <div class="detail-label">Evaluator Comments</div>
+        <div class="detail-value">${evaluation.comments}</div>
+      </div>
+      ` : ''}
+      <div class="detail-item">
+        <div class="detail-label">Evaluation Date</div>
+        <div class="detail-value">${evaluation.evaluation_date}</div>
+      </div>
+    </div>
+  </div>`;
+      }
+    } catch (e) {
+      console.error('Error fetching evaluation:', e);
+    }
 
     document.getElementById('modalTitle').textContent = data.fullName || 'Account Details';
     const details = document.getElementById('userDetails');
@@ -463,6 +651,9 @@ async function openUserModal(id) {
             <span class="status-indicator"></span>
             <span>${data.account_status || 'N/A'}</span>
           </span>
+          <span class="evaluation-badge ${hasEvaluation ? 'evaluated' : 'not-evaluated'}">
+            ${hasEvaluation ? '✓ Evaluated' : '⚠ Not Evaluated'}
+          </span>
         </div>
       </div>
       <div class="detail-item" style="grid-column: 1 / -1;">
@@ -481,6 +672,8 @@ async function openUserModal(id) {
     </div>
   </div>
 
+  ${evaluationHtml}
+
   <!-- Documents -->
   <div class="detail-section">
     <h3 class="section-header">Documents</h3>
@@ -492,17 +685,22 @@ async function openUserModal(id) {
 
     const accept = document.getElementById('acceptBtn');
     const reject = document.getElementById('rejectBtn');
+    const evaluateBtn = document.getElementById('evaluateBtn');
 
+    // Show/hide buttons based on account status
     if (data.account_status === 'accepted' || data.account_status === 'active') {
       accept.style.display = 'none';
       reject.style.display = 'inline-block';
+      evaluateBtn.style.display = hasEvaluation ? 'inline-block' : 'none';
     } else {
       accept.style.display = 'inline-block';
       reject.style.display = 'inline-block';
+      evaluateBtn.style.display = 'inline-block';
     }
 
     accept.onclick = () => updateAccountStatus(id, 'accepted');
     reject.onclick = () => updateAccountStatus(id, 'rejected');
+    evaluateBtn.onclick = () => openEvaluationModal(id);
     reject.innerHTML = "Delete"
     document.getElementById('userModal').style.display = 'flex';
 

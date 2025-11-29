@@ -1,3 +1,13 @@
+<?php
+  include "../utility/db.php";
+  session_start();
+  $user_id = $_SESSION['user_id'];
+  $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+  $stmt->execute([$user_id]);
+  $re = $stmt->get_result();
+  $user = $re->fetch_assoc();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -527,34 +537,34 @@
 
       <!-- Profile Header Card -->
       <div class="profile-header-card">
-        <div class="profile-pic-container">
+        <!-- <div class="profile-pic-container">
           <img id="profileImage" src="img/default_profile.png" alt="Profile Picture" class="profile-pic">
           <input type="file" id="fileInput" accept="image/*" style="display:none">
           <button class="upload-btn" id="uploadBtn">📷 Change Picture</button>
-        </div>
+        </div> -->
         <div class="profile-summary">
-          <div class="volunteer-name" id="infoName">Juan Dela Cruz</div>
-          <div class="volunteer-id">Volunteer ID: VL-2025-0001</div>
+          <div class="volunteer-name" id="infoName"><?php echo $user['fullName'] ?></div>
+          <div class="volunteer-id">Volunteer ID: L-2025-0001</div>
           <div class="quick-stats">
             <div class="quick-stat">
               <span class="quick-stat-icon">🩸</span>
               <div>
                 <div class="quick-stat-label">Blood Type</div>
-                <div class="quick-stat-value" id="quickBloodType">O+</div>
+                <div class="quick-stat-value" id="quickBloodType"><?php echo $user['bloodType'] ?></div>
               </div>
             </div>
             <div class="quick-stat">
               <span class="quick-stat-icon">📞</span>
               <div>
                 <div class="quick-stat-label">Mobile</div>
-                <div class="quick-stat-value" id="quickMobile">0912-345-6789</div>
+                <div class="quick-stat-value" id="quickMobile"><?php echo $user['mobile'] ?></div>
               </div>
             </div>
             <div class="quick-stat">
               <span class="quick-stat-icon">✅</span>
               <div>
                 <div class="quick-stat-label">Status</div>
-                <div class="quick-stat-value">Active Volunteer</div>
+                <div class="quick-stat-value"><?php echo $user['status'] ?></div>
               </div>
             </div>
           </div>
@@ -570,35 +580,35 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">👤 Full Name</div>
-            <div class="info-value" id="infoName2">Juan Dela Cruz</div>
+            <div class="info-value" id="infoName2"><?php echo $user['fullName'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📍 Birth Place</div>
-            <div class="info-value" id="infoBirthPlace">Masbate City</div>
+            <div class="info-value" id="infoBirthPlace"><?php echo $user['birthPlace'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">⚧ Sex</div>
-            <div class="info-value" id="infoSex">Male</div>
+            <div class="info-value" id="infoSex"><?php echo $user['sex'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🎂 Date of Birth</div>
-            <div class="info-value" id="infoDob">January 15, 1995</div>
+            <div class="info-value" id="infoDob"><?php echo $user['dob'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🕊️ Religion</div>
-            <div class="info-value" id="infoReligion">Roman Catholic</div>
+            <div class="info-value" id="infoReligion"><?php echo $user['religion'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">💍 Civil Status</div>
-            <div class="info-value" id="infoCivilStatus">Single</div>
+            <div class="info-value" id="infoCivilStatus"><?php echo $user['civilStatus'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">👫 Spouse</div>
-            <div class="info-value" id="infoSpouse">N/A</div>
+            <div class="info-value" id="infoSpouse"><?php echo $user['spouse'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">👶 Number of Children</div>
-            <div class="info-value" id="infoChildren">0</div>
+            <div class="info-value" id="infoChildren"><?php echo $user['children'] ?></div>
           </div>
         </div>
       </div>
@@ -612,15 +622,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">📐 Height</div>
-            <div class="info-value" id="infoHeight">170 cm</div>
+            <div class="info-value" id="infoHeight"><?php echo $user['height'] ?> cm</div>
           </div>
           <div class="info-item">
             <div class="info-label">⚖️ Weight</div>
-            <div class="info-value" id="infoWeight">65 kg</div>
+            <div class="info-value" id="infoWeight"><?php echo $user['weight'] ?> kg</div>
           </div>
           <div class="info-item">
             <div class="info-label">🩸 Blood Type</div>
-            <div class="info-value" id="infoBloodType">O+</div>
+            <div class="info-value" id="infoBloodType"><?php echo $user['bloodType'] ?></div>
           </div>
         </div>
       </div>
@@ -634,15 +644,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">📱 Mobile Number</div>
-            <div class="info-value" id="infoMobile">0912-345-6789</div>
+            <div class="info-value" id="infoMobile"><?php echo $user['mobile'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">☎️ Landline</div>
-            <div class="info-value" id="infoLandline">(056) 333-1234</div>
+            <div class="info-value" id="infoLandline"><?php echo $user['landline'] ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">🏠 Complete Address</div>
-            <div class="info-value" id="infoAddress">123 Quezon Street, Masbate City, Masbate Province 5400</div>
+            <div class="info-value" id="infoAddress"><?php echo $user['address'] ?></div>
           </div>
         </div>
       </div>
@@ -656,11 +666,11 @@
         <div class="info-grid">
           <div class="info-item full-width">
             <div class="info-label">⚕️ Health Conditions / Allergies</div>
-            <div class="info-value" id="infoHealth">None reported</div>
+            <div class="info-value" id="infoHealth"><?php echo $user['health'] || "No report" ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">💊 Current Medication</div>
-            <div class="info-value" id="infoMedication">None</div>
+            <div class="info-value" id="infoMedication"><?php echo $user['medication'] ?></div>
           </div>
         </div>
       </div>
@@ -674,35 +684,35 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">📚 Elementary</div>
-            <div class="info-value" id="infoElementary">Masbate Central School</div>
+            <div class="info-value" id="infoElementary"><?php echo $user['elementary'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoElemYearGrad">2007</div>
+            <div class="info-value" id="infoElemYearGrad"><?php echo $user['elemYearGrad'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🏫 High School</div>
-            <div class="info-value" id="infoHighSchool">Masbate National Comprehensive High School</div>
+            <div class="info-value" id="infoHighSchool"><?php echo $user['highSchool'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoHsYearGrad">2011</div>
+            <div class="info-value" id="infoHsYearGrad"><?php echo $user['hsYearGrad'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🎓 College / Course</div>
-            <div class="info-value" id="infoCollege">Bicol University - Bachelor of Science in Nursing</div>
+            <div class="info-value" id="infoCollege"><?php echo $user['college'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoCollegeYearGrad">2015</div>
+            <div class="info-value" id="infoCollegeYearGrad"><?php echo $user['collegeYearGrad'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📖 Post Graduate</div>
-            <div class="info-value" id="infoPostGrad">N/A</div>
+            <div class="info-value" id="infoPostGrad"><?php echo $user['postGrad'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoPostGradYear">N/A</div>
+            <div class="info-value" id="infoPostGradYear"><?php echo $user['postGradYear'] ?></div>
           </div>
         </div>
       </div>
@@ -716,11 +726,11 @@
         <div class="info-grid">
           <div class="info-item full-width">
             <div class="info-label">🛠️ Skills</div>
-            <div class="info-value" id="infoSkills">First Aid, CPR, Emergency Medical Response, Community Health Education, Disaster Relief Coordination</div>
+            <div class="info-value" id="infoSkills"><?php echo $user['skills'] ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">🌐 Languages / Dialects</div>
-            <div class="info-value" id="infoLanguages">Filipino, English, Bicolano, Cebuano</div>
+            <div class="info-value" id="infoLanguages"><?php echo $user['languages'] ?></div>
           </div>
         </div>
       </div>
@@ -734,7 +744,7 @@
         <div class="info-grid">
           <div class="info-item full-width">
             <div class="info-label">🏛️ Affiliation / Position</div>
-            <div class="info-value" id="infoInvolvements">Barangay Health Committee Member, Community Disaster Response Team Coordinator</div>
+            <div class="info-value" id="infoInvolvements"><?php echo $user['involvements'] ?></div>
           </div>
         </div>
       </div>
@@ -748,15 +758,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">🏢 Company Name</div>
-            <div class="info-value" id="infoCompany">Masbate Provincial Hospital</div>
+            <div class="info-value" id="infoCompany"><?php echo $user['company'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">👨‍⚕️ Position</div>
-            <div class="info-value" id="infoPosition">Staff Nurse</div>
+            <div class="info-value" id="infoPosition"><?php echo $user['position'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Inclusive Dates</div>
-            <div class="info-value" id="infoWorkDates">June 2015 - Present</div>
+            <div class="info-value" id="infoWorkDates"><?php echo $user['workDates'] ?></div>
           </div>
         </div>
       </div>
@@ -770,15 +780,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">🎯 Red Cross Member</div>
-            <div class="info-value" id="infoRedCrossMember">Yes</div>
+            <div class="info-value" id="infoRedCrossMember"><?php echo $user['redCrossMember'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🏅 Membership Type</div>
-            <div class="info-value" id="infoMembershipType">Active Volunteer</div>
+            <div class="info-value" id="infoMembershipType"><?php echo $user['membershipType'] ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">📜 Trainings Attended</div>
-            <div class="info-value" id="infoTrainings">Basic Life Support (BLS), First Aid & CPR, Disaster Risk Reduction Management, Psychological First Aid, Search and Rescue Operations</div>
+            <div class="info-value" id="infoTrainings"><?php echo $user['trainings'] ?></div>
           </div>
         </div>
       </div>
@@ -792,11 +802,11 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">👤 Name</div>
-            <div class="info-value" id="infoRefName">Dr. Maria Santos</div>
+            <div class="info-value" id="infoRefName"><?php echo $user['refName'] ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📞 Contact Number</div>
-            <div class="info-value" id="infoRefContact">0917-888-9999</div>
+            <div class="info-value" id="infoRefContact"><?php echo $user['refContact'] && "N/A" ?></div>
           </div>
         </div>
       </div>
@@ -914,7 +924,7 @@
       document.getElementById('infoRefContact').textContent = data.refContact;
     }
 
-    document.addEventListener('DOMContentLoaded', loadProfileData);
+    // document.addEventListener('DOMContentLoaded', loadProfileData);
   </script>
 </body>
 </html>

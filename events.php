@@ -21,7 +21,7 @@
         <a href="accounts.php"><i class="fas fa-users fa-fw"></i>Accounts</a>
     <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
     <a href="map.php"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
-    <a href="login.php"><i class="fas fa-map-marker-alt fa-fw"></i>Logout</a>
+    <a href="login.php"><i class="fas fa-sign-out-alt fa-fw"></i>Logout</a>
     <!-- <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a> -->
 
   </div>
@@ -61,8 +61,13 @@
       <input type="text" id="longitude" placeholder="Longitude" required>
       <input type="text" id="latitude" placeholder="Latitude" required>
       <button type="button" id="mapModalBtn">Add coordinates</button>
-        <label>Date & Time</label>
+        <label>Start Date & Time</label>
         <input type="datetime-local" id="eventDateTime" required>
+        <label>Duration (hours)</label>
+        <input type="number" id="eventDuration" min="1" max="720" value="8" required placeholder="Event duration in hours">
+        <small style="color: #666; display: block; margin-top: -10px; margin-bottom: 15px;">
+          End time will be calculated automatically
+        </small>
         <button type="submit" id="saveEvent">Save Event</button>
       </form>
     </div>
@@ -86,7 +91,10 @@
       <h3>EVENT INFORMATION</h3>
       <p><strong>Event Name:</strong> <span id="viewName"></span></p>
       <p><strong>Location:</strong> <span id="viewLocation"></span></p>
-      <p><strong>Date and Time:</strong> <span id="viewDateTime"></span></p>
+      <p><strong>Start Date:</strong> <span id="viewDateTime"></span></p>
+      <p><strong>Duration:</strong> <span id="viewDuration"></span> hours</p>
+      <p><strong>End Date:</strong> <span id="viewEndDate"></span></p>
+      <p><strong>Status:</strong> <span id="viewStatus"></span></p>
       <button id="okBtn">OK</button>
     </div>
   </div>

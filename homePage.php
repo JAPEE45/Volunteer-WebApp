@@ -19,7 +19,7 @@
     <a href="accounts.php"><i class="fas fa-users fa-fw"></i>Accounts</a>
     <a href="events.php"><i class="fas fa-calendar-alt fa-fw"></i> Events</a>
     <a href="map.php"><i class="fas fa-map-marker-alt fa-fw"></i> Map</a>
-    <a href="login.php"><i class="fas fa-map-marker-alt fa-fw"></i>Logout</a>
+     <a href="login.php"><i class="fas fa-sign-out-alt fa-fw"></i>Logout</a>
     <!-- <a href="sms.php"><i class="fas fa-envelope fa-fw"></i> SMS Alerts</a> -->
   </div>
 

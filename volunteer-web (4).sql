@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 11, 2025 at 12:43 PM
+-- Generation Time: Oct 15, 2025 at 07:05 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,8 +42,12 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`id`, `username`, `password`, `user_id`, `createdAt`, `user_type`, `lastLogin`) VALUES
-(1, 'userD9BBBB', 'TDC{89[S)oa#', 4, '2025-10-08', 'volunteer', '2025-10-11'),
-(2, 'admin123', 'pass@123', 0, '2025-10-08', 'admin', '2025-10-11');
+(2, 'admin123', 'pass@123', 0, '2025-10-08', 'admin', '2025-10-11'),
+(8, 'user_8', 'a35da20c', 8, '2025-10-14', 'volunteer', '2025-10-14'),
+(13, 'user_10', 'b0fac96e', 10, '2025-10-14', 'volunteer', '2025-10-14'),
+(14, 'user_11', '62fe1dfd', 11, '2025-10-14', 'volunteer', '2025-10-14'),
+(15, 'user_11', '2ad3d7c8', 11, '2025-10-14', 'volunteer', '2025-10-14'),
+(16, 'user_12', 'aff05b70', 12, '2025-10-14', 'volunteer', '2025-10-14');
 
 -- --------------------------------------------------------
 
@@ -63,8 +67,13 @@ CREATE TABLE `deployment` (
 --
 
 INSERT INTO `deployment` (`id`, `event_id`, `user_id`, `createdAt`) VALUES
-(3, 5, 2, '2025-10-07'),
-(4, 5, 3, '2025-10-07');
+(19, 12, 8, '2025-10-14'),
+(25, 12, 9, '2025-10-14'),
+(26, 14, 10, '2025-10-14'),
+(27, 12, 10, '2025-10-14'),
+(28, 14, 11, '2025-10-14'),
+(29, 14, 12, '2025-10-14'),
+(30, 14, 10, '2025-10-14');
 
 -- --------------------------------------------------------
 
@@ -86,7 +95,9 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `eventName`, `location`, `date`, `latitude`, `longitude`) VALUES
-(5, 'Party', 'sa puso mo', '2025-10-21', '13.823687', '124.280243');
+(12, 'birthday ni yas', 'San Andres', '2025-10-15', '13.646521', '124.043884'),
+(14, 'catanduangan fest', 'virac', '2078-12-05', '13.699929', '124.243526'),
+(15, 'catanduangan fest', 'virac', '2025-10-15', '13.591799', '124.211426');
 
 -- --------------------------------------------------------
 
@@ -139,18 +150,23 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `documents` varchar(500) NOT NULL,
   `account_status` varchar(20) NOT NULL DEFAULT 'pending',
-  `status` varchar(20) NOT NULL DEFAULT 'not deployed'
+  `status` varchar(20) NOT NULL DEFAULT 'not deployed',
+  `reason` varchar(500) NOT NULL,
+  `createdAt` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_type`, `firstName`, `middleName`, `lastName`, `fullName`, `birthPlace`, `sex`, `dob`, `religion`, `height`, `weight`, `civilStatus`, `spouse`, `children`, `mobile`, `landline`, `address`, `health`, `medication`, `bloodType`, `elementary`, `elemYearGrad`, `highSchool`, `hsYearGrad`, `college`, `collegeYearGrad`, `postGrad`, `postGradYear`, `skills`, `languages`, `involvements`, `company`, `position`, `workDates`, `redCrossMember`, `membershipType`, `trainings`, `refName`, `refContact`, `age`, `created_at`, `documents`, `account_status`, `status`) VALUES
-(2, 'volunteer', 'i', 'i', 'i', 'i i i', 'i', 'Female', '2025-10-08', '9', '9', '9', '', '9', 9, '9', '9', '9', '9', '9', '', '99', '9', '', '9', '9', '9', '9', '', '9', '9', '9', '9', '9', '9', '', '9', '9', '9', '9', 9, '2025-10-06 17:45:35', '[\"hi po.pptx\"]', 'accepted', 'deployed'),
-(3, 'volunteer', 'jasper', 'angeles', 'fernandez', 'jasper angeles fernandez', 'cebu city', 'Male', '2009-02-09', ';', '162', '40', 'Single', 'kl', 9, '09197960151', '765867897', 'Sa puso mo', 'jk', 'jkj', 'kj', 'kjkj', 'kj', 'kj', 'kjk', 'jk', 'jk', 'j', 'kj', 'kjk', 'j', 'kj', 'k', 'jkj', 'k', 'Yes', 'ahaks', 'asa', 'japee', '0910', 12, '2025-10-06 21:08:39', '[\"index.php\"]', 'accepted', 'deployed'),
-(4, 'volunteer', 'Jessel', 'Fenandez', 'Camolo', 'Jessel Fenandez Camolo', 'Masbate City', 'Male', '2003-09-13', 'Christian', '162', '45', 'Single', 'Jasper A. Fernandez', 0, '09197960151', '', 'san fernando masbate', '', '', '', 'Central Elementary school', '2012-2013', 'basta', '2019-2020', 'Osmena Colleges', 'Not yet', '', '', 'Singing hehe', 'Minasbate', 'Uwu', 'Acode', 'Head Staff', 'Oct 14, 2024', 'Yes', 'qs', 'dsa', 'b', '9', 22, '2025-10-07 16:07:13', '[\"550556286_1866043530997785_3261884751009638669_n.png\"]', 'accepted', 'not deployed'),
-(5, 'volunteer', 'j', 'j', 'j', 'j j j', 'j', 'Male', '2025-10-20', 'kk', '80', '8', '', '9', 9, '9', '9', '9', '9', '9', '9', '9', '9', '9', '9', '999', '9', '9', '99', '', '9', '99', '9', '9', '9', '', '9', '9', '9', '9', 90, '2025-10-07 16:09:35', '[\"wps_wid.cid-996589457.1758604627.exe\"]', 'pending', 'not deployed');
+INSERT INTO `users` (`id`, `user_type`, `firstName`, `middleName`, `lastName`, `fullName`, `birthPlace`, `sex`, `dob`, `religion`, `height`, `weight`, `civilStatus`, `spouse`, `children`, `mobile`, `landline`, `address`, `health`, `medication`, `bloodType`, `elementary`, `elemYearGrad`, `highSchool`, `hsYearGrad`, `college`, `collegeYearGrad`, `postGrad`, `postGradYear`, `skills`, `languages`, `involvements`, `company`, `position`, `workDates`, `redCrossMember`, `membershipType`, `trainings`, `refName`, `refContact`, `age`, `created_at`, `documents`, `account_status`, `status`, `reason`, `createdAt`) VALUES
+(8, 'volunteer', 'danniella', 'aquino', 'delfino', 'danniella aquino delfino', 'san andres', 'Female', '2004-09-24', 'Roman Catholic', '151', '52', 'Single', '', 2, '09294690908', '', 'bislig, san andres catanduanes', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'No', '', '', '', '', 21, '2025-10-14 02:05:24', '[\"d5fa34fc8036cb75e16982e3eb0bb745.jpg\"]', 'accepted', 'deployed', '', '2025-10-14'),
+(9, 'volunteer', 'Nadine', 'aquino', 'Vargas', 'Nadine aquino Vargas', 'san andres', 'Female', '2004-09-24', 'Roman Catholic', '151', '52', 'Single', '', 2, '09275237773', '', 'asdsdfghhjhk', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'lorem', '', '', '', '', '', '', '', 21, '2025-10-14 02:12:47', '[\"Screenshot (7).png\"]', 'pending', 'deployed', '', '2025-10-14'),
+(10, 'volunteer', 'Yasmien Joy', 'Villalarbo', 'Avila', 'Yasmien Joy Villalarbo Avila', 'Virac', 'Female', '2003-11-11', 'Roman Catholic', '152', '60', 'Single', '', 0, '09482917041', '', 'Purok 7 Francia Virac Catanduanes', 'N/A', 'N/A', 'o', 'Virac Pilot Elementary School', '2016', 'Immaculate Conception Seminary Academy', '2022', 'Catanduanes State University', '', '', '', '', '', '', 'lorem', '', '', '', '', '', '', '', 21, '2025-10-14 04:00:13', '[\"Screenshot (2).png\"]', 'accepted', 'deployed', '', '2025-10-14'),
+(11, 'volunteer', 'reym,und', 'alsol', 'reginaldo', 'reym,und alsol reginaldo', 'virac', 'Male', '1980-12-05', 'Roman Catholic', '', '75', 'Married', 'Jamie Angelik S. Reginaldo', 2, '09959352577', '', 'mabini st., calatagan, virac, catanduanes', 'N/A', '', '0+', 'virac central elementary school', '', 'cnhs', '', 'catsu', '', '', '', 'none', '', 'odd fellows', 'prc', 'volunteer', '', 'Yes', '', 'n/a', '', '', 44, '2025-10-14 05:51:12', '[]', 'accepted', 'deployed', '', '2025-10-14'),
+(12, 'volunteer', 'Mark', 'M.', 'Jamero', 'Mark M. Jamero', 'Virac', 'Male', '2025-10-01', 'Roman Catholic', '164', '60', 'Single', 'na', 0, '09482865624', '', 'Calatagan, Virac, Catanduanes', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '2025-10-14 06:14:02', '[]', 'accepted', 'deployed', '', '2025-10-14'),
+(13, 'volunteer', 'Shaira', 'Beatriz', 'Vargas', 'Shaira Beatriz Vargas', 'Catanduanes ', 'Female', '2000-10-14', 'Roman catholic', '150', '49', 'Single', 'N/a', 0, '09456646371', '0000000', '', 'Na', 'Na', '0', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 25, '2025-10-14 12:41:28', '[]', 'pending', 'not deployed', '', '2025-10-14'),
+(14, 'volunteer', 'Shaira', '', 'Vargas', 'Shaira  Vargas', '', 'Female', '0000-00-00', '', '', '', '', '', 0, '09275237773', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '2025-10-14 12:42:35', '[]', 'pending', 'not deployed', '', '2025-10-14');
 
 --
 -- Indexes for dumped tables
@@ -188,25 +204,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `deployment`
 --
 ALTER TABLE `deployment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

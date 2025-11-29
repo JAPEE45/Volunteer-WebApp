@@ -732,11 +732,15 @@
             <option value="rejected">Rejected</option>
           </select>
         </div>
+        <button id="deploySelectedBtn" onclick="openBatchDeployModal()" style="display:none; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #dc143c 0%, #a00000 100%); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);">
+          <span>🚀 Deploy Selected (<span id="selectedCount">0</span>)</span>
+        </button>
       </div>
     </div>
     <table id="volunteerTable" border="1">
       <thead>
         <tr>
+          <th style="width:50px;text-align:center;"><input type="checkbox" id="selectAllVolunteers" title="Select All" onclick="toggleSelectAll(this)"></th>
           <th>Name</th>
           <th>Deployment Location</th>
           <th>Status</th>

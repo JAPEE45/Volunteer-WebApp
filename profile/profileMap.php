@@ -1,3 +1,27 @@
+<?php
+include_once '../utility/db.php';
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../login.php');
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+$stmt = $conn->prepare('SELECT * FROM users WHERE id = ?');
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$res = $stmt->get_result();
+
+if ($res->num_rows === 0) {
+    session_destroy();
+    header('Location: ../login.php');
+    exit();
+}
+
+$result = $res->fetch_assoc();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -534,31 +558,31 @@
       <!-- Statistics -->
       <div class="map-stats">
         <div class="stat-card">
-          <div class="stat-icon">👥</div>
+          <div class="stat-icon">�</div>
           <div class="stat-content">
-            <div class="stat-label">Total Volunteers</div>
-            <div class="stat-value" id="totalVolunteers">245</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">✅</div>
-          <div class="stat-content">
-            <div class="stat-label">Active Now</div>
-            <div class="stat-value" id="activeVolunteers">42</div>
+            <div class="stat-label">Total Deployments</div>
+            <div class="stat-value" id="totalDeployments">0</div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">🚑</div>
           <div class="stat-content">
-            <div class="stat-label">On Deployment</div>
-            <div class="stat-value" id="deployedVolunteers">18</div>
+            <div class="stat-label">Current Deployment</div>
+            <div class="stat-value" id="currentDeployment">0</div>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">💼</div>
+          <div class="stat-icon">✅</div>
           <div class="stat-content">
-            <div class="stat-label">Available</div>
-            <div class="stat-value" id="availableVolunteers">185</div>
+            <div class="stat-label">Completed</div>
+            <div class="stat-value" id="completedDeployments">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">�</div>
+          <div class="stat-content">
+            <div class="stat-label">Status</div>
+            <div class="stat-value" id="userStatus" style="font-size: 1.2rem; text-transform: capitalize;">Loading...</div>
           </div>
         </div>
       </div>
@@ -566,17 +590,17 @@
       <!-- Map Wrapper -->
       <div class="map-wrapper">
         <div class="map-controls">
-          <button class="control-btn" onclick="showAllVolunteers()">
-            <span>👥</span>
-            <span>Show All</span>
+          <button class="control-btn" id="btnAllDeployments" onclick="showAllDeployments()">
+            <span>�</span>
+            <span>All Deployments</span>
           </button>
-          <button class="control-btn secondary" onclick="showActiveOnly()">
-            <span>✅</span>
-            <span>Active Only</span>
-          </button>
-          <button class="control-btn secondary" onclick="showDeployedOnly()">
+          <button class="control-btn secondary" id="btnCurrentDeployment" onclick="showCurrentDeployment()">
             <span>🚑</span>
-            <span>Deployed Only</span>
+            <span>Current Deployment</span>
+          </button>
+          <button class="control-btn secondary" id="btnCompletedDeployments" onclick="showCompletedDeployments()">
+            <span>✅</span>
+            <span>Completed Deployments</span>
           </button>
           <button class="control-btn secondary" onclick="centerMap()">
             <span>🎯</span>
@@ -587,18 +611,18 @@
         <div id="map"></div>
 
         <div class="legend">
-          <div class="legend-title">🏷️ Volunteer Status Legend</div>
-          <div class="legend-item">
-            <div class="legend-icon active">✓</div>
-            <span>Active - Currently on duty</span>
-          </div>
+          <div class="legend-title">🏷️ Deployment Status Legend</div>
           <div class="legend-item">
             <div class="legend-icon deployed">🚑</div>
-            <span>Deployed - On emergency response</span>
+            <span>Current Deployment - Currently deployed</span>
           </div>
           <div class="legend-item">
-            <div class="legend-icon available">💼</div>
-            <span>Available - Ready for deployment</span>
+            <div class="legend-icon active">✅</div>
+            <span>Completed - Past deployments</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-icon available">�</div>
+            <span>All Deployments - Complete history</span>
           </div>
         </div>
       </div>
@@ -609,7 +633,10 @@
   <script>
     let map;
     let markers = [];
-    let volunteerData = [];
+    let allDeploymentsData = [];
+    let currentDeploymentData = null;
+    let completedDeploymentsData = [];
+    let currentFilter = 'all';
 
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
@@ -621,13 +648,13 @@
     function handleLogout() {
       if (confirm('Are you sure you want to logout?')) {
         console.log('Logging out...');
-        window.location.href = 'logout.php';
+        window.location.href = '../index.php';
       }
     }
 
     function initMap() {
-      // Initialize map centered on Masbate, Philippines
-      map = L.map('map').setView([12.3658, 123.6175], 12);
+      // Initialize map centered on Catanduanes, Philippines
+      map = L.map('map').setView([13.699929, 124.243526], 10);
 
       // Add OpenStreetMap tiles
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -635,70 +662,57 @@
         maxZoom: 18
       }).addTo(map);
 
-      // Sample volunteer data
-      volunteerData = [
-        { 
-          name: "Juan Dela Cruz", 
-          lat: 12.3658, 
-          lng: 123.6175, 
-          status: "active",
-          role: "Medical Assistant",
-          contact: "0912-345-6789"
-        },
-        { 
-          name: "Maria Santos", 
-          lat: 12.3708, 
-          lng: 123.6225, 
-          status: "deployed",
-          role: "Team Leader",
-          contact: "0917-888-9999"
-        },
-        { 
-          name: "Pedro Reyes", 
-          lat: 12.3608, 
-          lng: 123.6125, 
-          status: "available",
-          role: "First Aid Responder",
-          contact: "0923-456-7890"
-        },
-        { 
-          name: "Ana Lopez", 
-          lat: 12.3758, 
-          lng: 123.6275, 
-          status: "active",
-          role: "Logistics Coordinator",
-          contact: "0935-678-9012"
-        },
-        { 
-          name: "Carlos Mendoza", 
-          lat: 12.3558, 
-          lng: 123.6075, 
-          status: "deployed",
-          role: "Emergency Medical Technician",
-          contact: "0918-234-5678"
-        },
-        { 
-          name: "Rosa Garcia", 
-          lat: 12.3808, 
-          lng: 123.6325, 
-          status: "available",
-          role: "Volunteer Coordinator",
-          contact: "0927-890-1234"
-        }
-      ];
-
-      // Add markers for all volunteers
-      addVolunteerMarkers(volunteerData);
+      // Load deployment data from database
+      loadDeploymentData();
     }
 
-    function addVolunteerMarkers(volunteers) {
+    async function loadDeploymentData() {
+      try {
+        const response = await fetch('../utility/getVolunteerMapData.php');
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.error || 'Failed to load data');
+        }
+
+        allDeploymentsData = data.allDeployments || [];
+        currentDeploymentData = data.currentDeployment;
+        completedDeploymentsData = data.completedDeployments || [];
+
+        // Update statistics
+        document.getElementById('totalDeployments').textContent = data.statistics.total || 0;
+        document.getElementById('currentDeployment').textContent = data.statistics.current || 0;
+        document.getElementById('completedDeployments').textContent = data.statistics.completed || 0;
+        document.getElementById('userStatus').textContent = data.statistics.userStatus || 'N/A';
+
+        // Show all deployments by default
+        showAllDeployments();
+
+        // Center map on first deployment if exists
+        if (allDeploymentsData.length > 0) {
+          const firstDeployment = allDeploymentsData[0];
+          map.setView([firstDeployment.lat, firstDeployment.lng], 12);
+        }
+
+      } catch (error) {
+        console.error('Error loading deployment data:', error);
+        alert('Failed to load deployment data. Please refresh the page.');
+      }
+    }
+
+    function addDeploymentMarkers(deployments, markerType = 'all') {
       // Clear existing markers
       markers.forEach(marker => map.removeLayer(marker));
       markers = [];
 
-      volunteers.forEach(volunteer => {
-        // Create custom icon based on status
-        const iconHtml = getStatusIcon(volunteer.status);
+      if (deployments.length === 0) {
+        alert('No deployments found for this filter.');
+        return;
+      }
+
+      deployments.forEach(deployment => {
+        // Create custom icon based on marker type
+        const iconHtml = getDeploymentIcon(markerType);
         const customIcon = L.divIcon({
           className: 'custom-marker',
           html: iconHtml,
@@ -707,16 +721,32 @@
           popupAnchor: [0, -40]
         });
 
+        // Format dates
+        const eventDate = new Date(deployment.event_date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+        
+        const deploymentDate = new Date(deployment.deployment_date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+
         // Create marker
-        const marker = L.marker([volunteer.lat, volunteer.lng], { icon: customIcon })
+        const marker = L.marker([deployment.lat, deployment.lng], { icon: customIcon })
           .bindPopup(`
             <div class="popup-header">
-              ${getStatusEmoji(volunteer.status)} ${volunteer.name}
+              ${getDeploymentEmoji(markerType)} ${deployment.eventName}
             </div>
             <div class="popup-info">
-              <strong>Role:</strong> ${volunteer.role}<br>
-              <strong>Status:</strong> ${volunteer.status.charAt(0).toUpperCase() + volunteer.status.slice(1)}<br>
-              <strong>Contact:</strong> ${volunteer.contact}
+              <strong>Location:</strong> ${deployment.location}<br>
+              <strong>Event Date:</strong> ${eventDate}<br>
+              <strong>Deployed On:</strong> ${deploymentDate}<br>
+              <strong>Contact:</strong> ${deployment.mobile}<br>
+              <strong>📍 Latitude:</strong> ${deployment.lat}<br>
+              <strong>📍 Longitude:</strong> ${deployment.lng}
             </div>
           `)
           .addTo(map);
@@ -725,17 +755,17 @@
       });
     }
 
-    function getStatusIcon(status) {
+    function getDeploymentIcon(type) {
       const colors = {
-        active: 'background: linear-gradient(135deg, #10b981 0%, #059669 100%);',
-        deployed: 'background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);',
-        available: 'background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);'
+        current: 'background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);',
+        completed: 'background: linear-gradient(135deg, #10b981 0%, #059669 100%);',
+        all: 'background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);'
       };
 
-      const emoji = getStatusEmoji(status);
+      const emoji = getDeploymentEmoji(type);
       
       return `
-        <div style="${colors[status]} width: 40px; height: 40px; border-radius: 50%; 
+        <div style="${colors[type]} width: 40px; height: 40px; border-radius: 50%; 
                      display: flex; align-items: center; justify-content: center; 
                      font-size: 20px; border: 3px solid white; 
                      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -751,46 +781,85 @@
       `;
     }
 
-    function getStatusEmoji(status) {
+    function getDeploymentEmoji(type) {
       const emojis = {
-        active: '✓',
-        deployed: '🚑',
-        available: '💼'
+        current: '🚑',
+        completed: '✅',
+        all: '�'
       };
-      return emojis[status] || '📍';
+      return emojis[type] || '📍';
     }
 
-    function showAllVolunteers() {
-      addVolunteerMarkers(volunteerData);
+    function updateButtonStates(activeButton) {
+      // Reset all buttons
+      document.querySelectorAll('.control-btn').forEach(btn => {
+        if (btn.id && btn.id.startsWith('btn')) {
+          btn.classList.add('secondary');
+          btn.classList.remove('active');
+        }
+      });
+
+      // Set active button
+      if (activeButton) {
+        activeButton.classList.remove('secondary');
+      }
     }
 
-    function showActiveOnly() {
-      const activeVolunteers = volunteerData.filter(v => v.status === 'active');
-      addVolunteerMarkers(activeVolunteers);
+    function showAllDeployments() {
+      currentFilter = 'all';
+      updateButtonStates(document.getElementById('btnAllDeployments'));
+      addDeploymentMarkers(allDeploymentsData, 'all');
+      
+      // Center map on first deployment if exists
+      if (allDeploymentsData.length > 0) {
+        const firstDeployment = allDeploymentsData[0];
+        map.setView([firstDeployment.lat, firstDeployment.lng], 12);
+      }
     }
 
-    function showDeployedOnly() {
-      const deployedVolunteers = volunteerData.filter(v => v.status === 'deployed');
-      addVolunteerMarkers(deployedVolunteers);
+    function showCurrentDeployment() {
+      currentFilter = 'current';
+      updateButtonStates(document.getElementById('btnCurrentDeployment'));
+      
+      if (currentDeploymentData) {
+        addDeploymentMarkers([currentDeploymentData], 'current');
+        map.setView([currentDeploymentData.lat, currentDeploymentData.lng], 13);
+      } else {
+        markers.forEach(marker => map.removeLayer(marker));
+        markers = [];
+        alert('No current deployment found.');
+      }
+    }
+
+    function showCompletedDeployments() {
+      currentFilter = 'completed';
+      updateButtonStates(document.getElementById('btnCompletedDeployments'));
+      addDeploymentMarkers(completedDeploymentsData, 'completed');
+      
+      // Center map on first completed deployment if exists
+      if (completedDeploymentsData.length > 0) {
+        const firstDeployment = completedDeploymentsData[0];
+        map.setView([firstDeployment.lat, firstDeployment.lng], 12);
+      }
     }
 
     function centerMap() {
-      map.setView([12.3658, 123.6175], 12);
+      // Center based on current filter
+      if (currentFilter === 'current' && currentDeploymentData) {
+        map.setView([currentDeploymentData.lat, currentDeploymentData.lng], 13);
+      } else if (currentFilter === 'completed' && completedDeploymentsData.length > 0) {
+        map.setView([completedDeploymentsData[0].lat, completedDeploymentsData[0].lng], 12);
+      } else if (allDeploymentsData.length > 0) {
+        map.setView([allDeploymentsData[0].lat, allDeploymentsData[0].lng], 12);
+      } else {
+        // Default to Catanduanes center
+        map.setView([13.699929, 124.243526], 10);
+      }
     }
 
     // Initialize map when page loads
     document.addEventListener('DOMContentLoaded', function() {
       initMap();
-
-      // Update statistics
-      const activeCount = volunteerData.filter(v => v.status === 'active').length;
-      const deployedCount = volunteerData.filter(v => v.status === 'deployed').length;
-      const availableCount = volunteerData.filter(v => v.status === 'available').length;
-
-      document.getElementById('totalVolunteers').textContent = volunteerData.length;
-      document.getElementById('activeVolunteers').textContent = activeCount;
-      document.getElementById('deployedVolunteers').textContent = deployedCount;
-      document.getElementById('availableVolunteers').textContent = availableCount;
     });
   </script>
 </body>

@@ -40,7 +40,13 @@ async function renderEventLocation(){
   })
   console.log(j)
     Object.entries(locations).forEach(([town, coords]) => {
-    const marker = L.marker(coords).addTo(map).bindPopup(`<b>${town}</b>`);
+    const marker = L.marker(coords).addTo(map).bindPopup(`
+      <b>${town}</b><br>
+      <span style="font-size: 12px; color: #666;">
+        📍 Lat: ${coords[0]}<br>
+        📍 Lng: ${coords[1]}
+      </span>
+    `);
     marker.on("click", () => showVolunteersForLocation(town));
   });
 
