@@ -501,6 +501,14 @@
         <span class="nav-icon">👤</span>
         <span class="nav-text">Profile</span>
       </a>
+      <a href="activityReport.php" class="nav-item">
+        <span class="nav-icon">📄</span>
+        <span class="nav-text">Submit Report</span>
+      </a>
+      <a href="myReports.php" class="nav-item">
+        <span class="nav-icon">📂</span>
+        <span class="nav-text">My Reports</span>
+      </a>
       <a href="profileMap.php" class="nav-item">
         <span class="nav-icon">🗺️</span>
         <span class="nav-text">Map</span>
