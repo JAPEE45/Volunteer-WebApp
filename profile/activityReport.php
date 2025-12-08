@@ -9,25 +9,33 @@ include_once '../utility/db.php';
 
 $userId = $_SESSION['user_id'];
 
-// Get volunteer's deployments for the dropdown
-$deploymentsQuery = $conn->prepare("
-    SELECT 
-        d.id as deployment_id,
-        d.event_id,
-        e.eventName,
-        e.location,
-        e.date,
-        d.role,
-        d.createdAt as deployment_date
-    FROM deployment d
-    JOIN events e ON d.event_id = e.id
-    WHERE d.user_id = ?
-    ORDER BY d.createdAt DESC
-");
-$deploymentsQuery->bind_param("i", $userId);
-$deploymentsQuery->execute();
-$deploymentsResult = $deploymentsQuery->get_result();
-$deployments = $deploymentsResult->fetch_all(MYSQLI_ASSOC);
+// Check if activity_reports table exists
+$tableCheck = $conn->query("SHOW TABLES LIKE 'activity_reports'");
+$tableExists = $tableCheck->num_rows > 0;
+
+$deployments = [];
+
+if ($tableExists) {
+    // Get volunteer's deployments for the dropdown
+    $deploymentsQuery = $conn->prepare("
+        SELECT 
+            d.id as deployment_id,
+            d.event_id,
+            e.eventName,
+            e.location,
+            e.date,
+            d.role,
+            d.createdAt as deployment_date
+        FROM deployment d
+        JOIN events e ON d.event_id = e.id
+        WHERE d.user_id = ?
+        ORDER BY d.createdAt DESC
+    ");
+    $deploymentsQuery->bind_param("i", $userId);
+    $deploymentsQuery->execute();
+    $deploymentsResult = $deploymentsQuery->get_result();
+    $deployments = $deploymentsResult->fetch_all(MYSQLI_ASSOC);
+}
 $deploymentsQuery->close();
 
 // Get user info
@@ -92,6 +100,19 @@ $userQuery->close();
                     </div>
                 </div>
 
+                <?php if (!$tableExists): ?>
+                <!-- Database Setup Notice -->
+                <div class="section" style="background:linear-gradient(135deg, #fff5f5 0%, #fee 100%); border:3px solid #dc143c; text-align:center; padding:3rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size:4rem; color:#dc143c; margin-bottom:1rem;"></i>
+                    <h2 style="color:#dc143c; margin-bottom:1rem;">Activity Reports Feature Not Available</h2>
+                    <p style="color:#2d3748; font-size:1.1rem; margin-bottom:1.5rem;">
+                        The activity reports database table has not been set up yet. Please contact your administrator to enable this feature.
+                    </p>
+                    <p style="color:#64748b;">
+                        <strong>For Admins:</strong> Run the <code>database_activity_reports.sql</code> script in phpMyAdmin to enable this feature.
+                    </p>
+                </div>
+                <?php else: ?>
                 <!-- Deployment Selection -->
                 <div class="section">
                     <h2><i class="fas fa-calendar-check"></i> Deployment Details</h2>
@@ -200,6 +221,7 @@ $userQuery->close();
                         <i class="fas fa-paper-plane"></i> Submit Report
                     </button>
                 </div>
+                <?php endif; ?>
             </form>
         </div>
     </div>

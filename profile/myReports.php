@@ -9,42 +9,51 @@ include_once '../utility/db.php';
 
 $userId = $_SESSION['user_id'];
 
-// Get user's activity reports
-$reportsQuery = $conn->prepare("
-    SELECT 
-        ar.*,
-        e.eventName,
-        e.location,
-        e.date as event_date,
-        d.role
-    FROM activity_reports ar
-    JOIN events e ON ar.event_id = e.id
-    LEFT JOIN deployment d ON ar.deployment_id = d.id
-    WHERE ar.user_id = ?
-    ORDER BY ar.submitted_at DESC
-");
-$reportsQuery->bind_param("i", $userId);
-$reportsQuery->execute();
-$reportsResult = $reportsQuery->get_result();
-$reports = $reportsResult->fetch_all(MYSQLI_ASSOC);
-$reportsQuery->close();
+// Check if activity_reports table exists
+$tableCheck = $conn->query("SHOW TABLES LIKE 'activity_reports'");
+$tableExists = $tableCheck->num_rows > 0;
 
-// Get statistics
-$statsQuery = $conn->prepare("
-    SELECT 
-        COUNT(*) as total_reports,
-        SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
-        SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) as approved,
-        SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected,
-        SUM(hours_worked) as total_hours
-    FROM activity_reports
+$reports = [];
+$stats = ['total_reports' => 0, 'pending' => 0, 'approved' => 0, 'rejected' => 0, 'total_hours' => 0];
+
+if ($tableExists) {
+    // Get user's activity reports
+    $reportsQuery = $conn->prepare("
+        SELECT 
+            ar.*,
+            e.eventName,
+            e.location,
+            e.date as event_date,
+            d.role
+        FROM activity_reports ar
+        JOIN events e ON ar.event_id = e.id
+        LEFT JOIN deployment d ON ar.deployment_id = d.id
+        WHERE ar.user_id = ?
+        ORDER BY ar.submitted_at DESC
+    ");
+    $reportsQuery->bind_param("i", $userId);
+    $reportsQuery->execute();
+    $reportsResult = $reportsQuery->get_result();
+    $reports = $reportsResult->fetch_all(MYSQLI_ASSOC);
+    $reportsQuery->close();
+
+    // Get statistics
+    $statsQuery = $conn->prepare("
+        SELECT 
+            COUNT(*) as total_reports,
+            SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) as approved,
+            SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected,
+            SUM(hours_worked) as total_hours
+        FROM activity_reports
     WHERE user_id = ?
 ");
-$statsQuery->bind_param("i", $userId);
-$statsQuery->execute();
-$statsResult = $statsQuery->get_result();
-$stats = $statsResult->fetch_assoc();
-$statsQuery->close();
+    $statsQuery->bind_param("i", $userId);
+    $statsQuery->execute();
+    $statsResult = $statsQuery->get_result();
+    $stats = $statsResult->fetch_assoc();
+    $statsQuery->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -130,7 +139,14 @@ $statsQuery->close();
 
         <!-- Reports List -->
         <div class="reports-container">
-            <?php if (empty($reports)): ?>
+            <?php if (!$tableExists): ?>
+                <div class="empty-state" style="background:linear-gradient(135deg, #fff5f5 0%, #fee 100%); border:3px solid #dc143c; padding:3rem;">
+                    <i class="fas fa-database" style="color:#dc143c;"></i>
+                    <h2 style="color:#dc143c;">Activity Reports Not Available</h2>
+                    <p style="color:#2d3748;">The activity reports feature requires database setup. Please contact your administrator to enable this feature.</p>
+                    <p style="color:#64748b; margin-top:1rem;"><strong>For Admins:</strong> Run the <code>database_activity_reports.sql</code> script in phpMyAdmin.</p>
+                </div>
+            <?php elseif (empty($reports)): ?>
                 <div class="empty-state">
                     <i class="fas fa-inbox"></i>
                     <h2>No Reports Yet</h2>
