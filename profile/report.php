@@ -171,6 +171,79 @@ $result = $res->fetch_assoc();
       padding-top: 1rem;
     }
 
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      transition: width 0.3s ease;
+    }
+
+    .nav-item:hover::before {
+      width: 100%;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-item.active::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 60%;
+      background: white;
+      border-radius: 10px 0 0 10px;
+    }
+
+    .nav-icon {
+      font-size: 1.5rem;
+      min-width: 30px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-logout {
+      margin-top: 2rem;
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1rem;
+    }
+
     .main-content {
       margin-left: 280px;
       flex: 1;
@@ -736,13 +809,17 @@ $result = $res->fetch_assoc();
         <span class="nav-icon">👤</span>
         <span class="nav-text">Profile</span>
       </a>
+      <a href="activityReport.php" class="nav-item">
+        <span class="nav-icon">📄</span>
+        <span class="nav-text">Submit Report</span>
+      </a>
+      <a href="myReports.php" class="nav-item">
+        <span class="nav-icon">📂</span>
+        <span class="nav-text">My Reports</span>
+      </a>
       <a href="profileMap.php" class="nav-item">
         <span class="nav-icon">🗺️</span>
         <span class="nav-text">Map</span>
-      </a>
-      <a href="report.php" class="nav-item active">
-        <span class="nav-icon">📝</span>
-        <span class="nav-text">Report</span>
       </a>
       
       <div class="nav-logout">

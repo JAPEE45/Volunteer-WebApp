@@ -513,10 +513,6 @@
         <span class="nav-icon">🗺️</span>
         <span class="nav-text">Map</span>
       </a>
-      <a href="report.php" class="nav-item">
-        <span class="nav-icon">📝</span>
-        <span class="nav-text">Report</span>
-      </a>
       
       <div class="nav-logout">
         <a href="#logout" class="nav-item logout" onclick="handleLogout()">
@@ -558,14 +554,14 @@
               <span class="quick-stat-icon">🩸</span>
               <div>
                 <div class="quick-stat-label">Blood Type</div>
-                <div class="quick-stat-value" id="quickBloodType"><?php echo $user['bloodType'] ?></div>
+                <div class="quick-stat-value" id="quickBloodType"><?php echo $user['blood_type'] ?? 'N/A' ?></div>
               </div>
             </div>
             <div class="quick-stat">
               <span class="quick-stat-icon">📞</span>
               <div>
                 <div class="quick-stat-label">Mobile</div>
-                <div class="quick-stat-value" id="quickMobile"><?php echo $user['mobile'] ?></div>
+                <div class="quick-stat-value" id="quickMobile"><?php echo $user['mobile_number'] ?? 'N/A' ?></div>
               </div>
             </div>
             <div class="quick-stat">
@@ -592,31 +588,31 @@
           </div>
           <div class="info-item">
             <div class="info-label">📍 Birth Place</div>
-            <div class="info-value" id="infoBirthPlace"><?php echo $user['birthPlace'] ?></div>
+            <div class="info-value" id="infoBirthPlace"><?php echo $user['birth_place'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">⚧ Sex</div>
-            <div class="info-value" id="infoSex"><?php echo $user['sex'] ?></div>
+            <div class="info-value" id="infoSex"><?php echo $user['sex'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🎂 Date of Birth</div>
-            <div class="info-value" id="infoDob"><?php echo $user['dob'] ?></div>
+            <div class="info-value" id="infoDob"><?php echo $user['dob'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🕊️ Religion</div>
-            <div class="info-value" id="infoReligion"><?php echo $user['religion'] ?></div>
+            <div class="info-value" id="infoReligion"><?php echo $user['religion'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">💍 Civil Status</div>
-            <div class="info-value" id="infoCivilStatus"><?php echo $user['civilStatus'] ?></div>
+            <div class="info-value" id="infoCivilStatus"><?php echo $user['civil_status'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">👫 Spouse</div>
-            <div class="info-value" id="infoSpouse"><?php echo $user['spouse'] ?></div>
+            <div class="info-value" id="infoSpouse"><?php echo $user['spouse_name'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">👶 Number of Children</div>
-            <div class="info-value" id="infoChildren"><?php echo $user['children'] ?></div>
+            <div class="info-value" id="infoChildren"><?php echo $user['number_of_children'] ?? '0' ?></div>
           </div>
         </div>
       </div>
@@ -630,15 +626,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">📐 Height</div>
-            <div class="info-value" id="infoHeight"><?php echo $user['height'] ?> cm</div>
+            <div class="info-value" id="infoHeight"><?php echo $user['height'] ?? 'N/A' ?> cm</div>
           </div>
           <div class="info-item">
             <div class="info-label">⚖️ Weight</div>
-            <div class="info-value" id="infoWeight"><?php echo $user['weight'] ?> kg</div>
+            <div class="info-value" id="infoWeight"><?php echo $user['weight'] ?? 'N/A' ?> kg</div>
           </div>
           <div class="info-item">
             <div class="info-label">🩸 Blood Type</div>
-            <div class="info-value" id="infoBloodType"><?php echo $user['bloodType'] ?></div>
+            <div class="info-value" id="infoBloodType"><?php echo $user['blood_type'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>
@@ -652,15 +648,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">📱 Mobile Number</div>
-            <div class="info-value" id="infoMobile"><?php echo $user['mobile'] ?></div>
+            <div class="info-value" id="infoMobile"><?php echo $user['mobile_number'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">☎️ Landline</div>
-            <div class="info-value" id="infoLandline"><?php echo $user['landline'] ?></div>
+            <div class="info-value" id="infoLandline"><?php echo $user['landline_number'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">🏠 Complete Address</div>
-            <div class="info-value" id="infoAddress"><?php echo $user['address'] ?></div>
+            <div class="info-value" id="infoAddress"><?php echo $user['complete_address'] ?? $user['district_barangay_village'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>
@@ -674,11 +670,11 @@
         <div class="info-grid">
           <div class="info-item full-width">
             <div class="info-label">⚕️ Health Conditions / Allergies</div>
-            <div class="info-value" id="infoHealth"><?php echo $user['health'] || "No report" ?></div>
+            <div class="info-value" id="infoHealth"><?php echo $user['medical_conditions'] ?? 'No report' ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">💊 Current Medication</div>
-            <div class="info-value" id="infoMedication"><?php echo $user['medication'] ?></div>
+            <div class="info-value" id="infoMedication"><?php echo $user['current_medications'] ?? 'None' ?></div>
           </div>
         </div>
       </div>
@@ -692,35 +688,35 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">📚 Elementary</div>
-            <div class="info-value" id="infoElementary"><?php echo $user['elementary'] ?></div>
+            <div class="info-value" id="infoElementary"><?php echo $user['elementary_school'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoElemYearGrad"><?php echo $user['elemYearGrad'] ?></div>
+            <div class="info-value" id="infoElemYearGrad"><?php echo $user['elementary_year_graduated'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🏫 High School</div>
-            <div class="info-value" id="infoHighSchool"><?php echo $user['highSchool'] ?></div>
+            <div class="info-value" id="infoHighSchool"><?php echo $user['highschool_school'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoHsYearGrad"><?php echo $user['hsYearGrad'] ?></div>
+            <div class="info-value" id="infoHsYearGrad"><?php echo $user['highschool_year_graduated'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🎓 College / Course</div>
-            <div class="info-value" id="infoCollege"><?php echo $user['college'] ?></div>
+            <div class="info-value" id="infoCollege"><?php echo $user['college_school'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoCollegeYearGrad"><?php echo $user['collegeYearGrad'] ?></div>
+            <div class="info-value" id="infoCollegeYearGrad"><?php echo $user['college_year_graduated'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📖 Post Graduate</div>
-            <div class="info-value" id="infoPostGrad"><?php echo $user['postGrad'] ?></div>
+            <div class="info-value" id="infoPostGrad"><?php echo $user['higher_studies_school'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Year Graduated</div>
-            <div class="info-value" id="infoPostGradYear"><?php echo $user['postGradYear'] ?></div>
+            <div class="info-value" id="infoPostGradYear"><?php echo $user['higher_studies_year_graduated'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>
@@ -734,11 +730,11 @@
         <div class="info-grid">
           <div class="info-item full-width">
             <div class="info-label">🛠️ Skills</div>
-            <div class="info-value" id="infoSkills"><?php echo $user['skills'] ?></div>
+            <div class="info-value" id="infoSkills"><?php echo $user['skills'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">🌐 Languages / Dialects</div>
-            <div class="info-value" id="infoLanguages"><?php echo $user['languages'] ?></div>
+            <div class="info-value" id="infoLanguages"><?php echo $user['languages_dialects'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>
@@ -752,7 +748,7 @@
         <div class="info-grid">
           <div class="info-item full-width">
             <div class="info-label">🏛️ Affiliation / Position</div>
-            <div class="info-value" id="infoInvolvements"><?php echo $user['involvements'] ?></div>
+            <div class="info-value" id="infoInvolvements"><?php echo $user['involvement1_organization'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>
@@ -766,15 +762,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">🏢 Company Name</div>
-            <div class="info-value" id="infoCompany"><?php echo $user['company'] ?></div>
+            <div class="info-value" id="infoCompany"><?php echo $user['work_exp1_company'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">👨‍⚕️ Position</div>
-            <div class="info-value" id="infoPosition"><?php echo $user['position'] ?></div>
+            <div class="info-value" id="infoPosition"><?php echo $user['work_exp1_position'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📅 Inclusive Dates</div>
-            <div class="info-value" id="infoWorkDates"><?php echo $user['workDates'] ?></div>
+            <div class="info-value" id="infoWorkDates"><?php echo $user['work_exp1_year'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>
@@ -788,15 +784,15 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">🎯 Red Cross Member</div>
-            <div class="info-value" id="infoRedCrossMember"><?php echo $user['redCrossMember'] ?></div>
+            <div class="info-value" id="infoRedCrossMember"><?php echo $user['rc_is_volunteer'] ?? 'NO' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">🏅 Membership Type</div>
-            <div class="info-value" id="infoMembershipType"><?php echo $user['membershipType'] ?></div>
+            <div class="info-value" id="infoMembershipType"><?php echo $user['rc_has_maab'] ?? 'NO' ?></div>
           </div>
           <div class="info-item full-width">
             <div class="info-label">📜 Trainings Attended</div>
-            <div class="info-value" id="infoTrainings"><?php echo $user['trainings'] ?></div>
+            <div class="info-value" id="infoTrainings"><?php echo $user['rc_other_trainings'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>
@@ -810,11 +806,11 @@
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">👤 Name</div>
-            <div class="info-value" id="infoRefName"><?php echo $user['refName'] ?></div>
+            <div class="info-value" id="infoRefName"><?php echo $user['reference1_name'] ?? 'N/A' ?></div>
           </div>
           <div class="info-item">
             <div class="info-label">📞 Contact Number</div>
-            <div class="info-value" id="infoRefContact"><?php echo $user['refContact'] && "N/A" ?></div>
+            <div class="info-value" id="infoRefContact"><?php echo $user['reference1_contact'] ?? 'N/A' ?></div>
           </div>
         </div>
       </div>

@@ -159,7 +159,21 @@ if (activityReportForm) {
         body: formData
       });
       
-      const result = await response.json();
+      // Check if response is ok
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      // Get response text first to check if it's valid JSON
+      const responseText = await response.text();
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (jsonError) {
+        console.error('Invalid JSON response:', responseText);
+        throw new Error('Server returned invalid response. Please check the console for details.');
+      }
       
       if (result.success) {
         alert('Activity report submitted successfully! You will be notified once it is reviewed.');

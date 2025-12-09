@@ -19,10 +19,8 @@ try {
             d.user_id,
             d.event_id,
             d.createdAt as deployment_date,
-            u.firstName,
-            u.middleName,
-            u.lastName,
-            u.mobile,
+            u.fullName,
+            u.mobile_number,
             u.status as user_status,
             e.eventName,
             e.location,
@@ -47,14 +45,14 @@ try {
         $deploymentData = [
             'deployment_id' => $row['deployment_id'],
             'event_id' => $row['event_id'],
-            'name' => trim($row['firstName'] . ' ' . $row['middleName'] . ' ' . $row['lastName']),
+            'name' => $row['fullName'],
             'eventName' => $row['eventName'],
             'location' => $row['location'],
             'lat' => floatval($row['latitude']),
             'lng' => floatval($row['longitude']),
             'deployment_date' => $row['deployment_date'],
             'event_date' => $row['event_date'],
-            'mobile' => $row['mobile'] ?: 'N/A',
+            'mobile' => $row['mobile_number'] ?: 'N/A',
             'user_status' => $row['user_status']
         ];
         

@@ -492,19 +492,19 @@ async function openUserModal(id) {
       </div>
       <div class="detail-item">
         <div class="detail-label">First Name</div>
-        <div class="detail-value ${!data.firstName ? 'na' : ''}">${data.firstName || 'N/A'}</div>
+        <div class="detail-value ${!data.given_name ? 'na' : ''}">${data.given_name || data.firstName || 'N/A'}</div>
       </div>
       <div class="detail-item">
         <div class="detail-label">Middle Name</div>
-        <div class="detail-value ${!data.middleName ? 'na' : ''}">${data.middleName || 'N/A'}</div>
+        <div class="detail-value ${!data.middle_name ? 'na' : ''}">${data.middle_name || data.middleName || 'N/A'}</div>
       </div>
       <div class="detail-item">
         <div class="detail-label">Last Name</div>
-        <div class="detail-value ${!data.lastName ? 'na' : ''}">${data.lastName || 'N/A'}</div>
+        <div class="detail-value ${!data.family_name ? 'na' : ''}">${data.family_name || data.lastName || 'N/A'}</div>
       </div>
       <div class="detail-item">
         <div class="detail-label">Birthplace</div>
-        <div class="detail-value ${!data.birthPlace ? 'na' : ''}">${data.birthPlace || 'N/A'}</div>
+        <div class="detail-value ${!data.birth_place ? 'na' : ''}">${data.birth_place || data.birthPlace || 'N/A'}</div>
       </div>
       <div class="detail-item">
         <div class="detail-label">Date of Birth</div>

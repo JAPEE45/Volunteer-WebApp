@@ -53,8 +53,7 @@ if ($tableExists) {
     $query = "
         SELECT 
             ar.*,
-            u.fullName as volunteer_name,
-            u.mobile,
+            u.id as user_id_val,
             e.eventName,
             e.location,
             e.date as event_date,
@@ -75,6 +74,32 @@ if ($tableExists) {
     $result = $stmt->get_result();
     $reports = $result->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
+    
+    // Get volunteer details for each report separately to handle different column names
+    foreach ($reports as &$report) {
+        $userStmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+        $userStmt->bind_param("i", $report['user_id']);
+        $userStmt->execute();
+        $userResult = $userStmt->get_result();
+        $userData = $userResult->fetch_assoc();
+        $userStmt->close();
+        
+        // Build name from available columns
+        if (!empty($userData['fullName'])) {
+            $report['volunteer_name'] = $userData['fullName'];
+        } else {
+            $nameParts = array_filter([
+                $userData['given_name'] ?? $userData['firstName'] ?? '',
+                $userData['middle_name'] ?? $userData['middleName'] ?? '',
+                $userData['last_name'] ?? $userData['lastName'] ?? ''
+            ]);
+            $report['volunteer_name'] = implode(' ', $nameParts) ?: 'Unknown';
+        }
+        
+        // Get mobile number
+        $report['mobile'] = $userData['mobile_number'] ?? $userData['mobile'] ?? '';
+    }
+    unset($report);
 
     // Get statistics
     $statsQuery = $conn->query("

@@ -12,8 +12,8 @@ $sql = "SELECT
     a.lastLogin,
     u.id AS user_pk,
     u.fullName,
-    u.mobile,
-    u.address,
+    u.mobile_number as mobile,
+    u.district_barangay_village as address,
     u.account_status,
     u.status
 FROM account a

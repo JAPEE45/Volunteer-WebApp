@@ -1,11 +1,44 @@
 <?php
-session_start();
-include_once 'db.php';
+// Error handling: catch errors but return them as JSON
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display to browser
+ini_set('log_errors', 1);
 
+// Custom error handler to catch PHP errors
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    if (ob_get_level()) ob_end_clean();
+    header('Content-Type: application/json');
+    echo json_encode([
+        "success" => false,
+        "message" => "Server error occurred",
+        "error" => $errstr,
+        "file" => basename($errfile),
+        "line" => $errline
+    ]);
+    exit();
+});
+
+// Start session
+session_start();
+
+// Start output buffering to catch any accidental output
+ob_start();
+
+// Set JSON header immediately
 header('Content-Type: application/json');
+
+// Include database connection with error handling
+try {
+    include_once 'db.php';
+} catch (Exception $e) {
+    ob_end_clean();
+    echo json_encode(["success" => false, "message" => "Database connection error: " . $e->getMessage()]);
+    exit();
+}
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
+    ob_end_clean();
     echo json_encode(["success" => false, "message" => "Unauthorized access"]);
     exit();
 }
@@ -14,6 +47,7 @@ $userId = $_SESSION['user_id'];
 
 // Validate POST request
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    ob_end_clean();
     echo json_encode(["success" => false, "message" => "Invalid request method"]);
     exit();
 }
@@ -30,41 +64,63 @@ $recommendations = isset($_POST['recommendations']) ? trim($_POST['recommendatio
 
 // Validate required fields
 if ($deploymentId <= 0 || $eventId <= 0 || empty($dateOfActivity) || $hoursWorked <= 0 || empty($activitiesPerformed)) {
+    ob_end_clean();
     echo json_encode(["success" => false, "message" => "Please fill in all required fields"]);
     exit();
 }
 
 // Validate hours worked
 if ($hoursWorked < 0.5 || $hoursWorked > 24) {
+    ob_end_clean();
     echo json_encode(["success" => false, "message" => "Hours worked must be between 0.5 and 24"]);
     exit();
 }
 
 // Verify deployment belongs to user
-$verifyStmt = $conn->prepare("SELECT id FROM deployment WHERE id = ? AND user_id = ?");
-$verifyStmt->bind_param("ii", $deploymentId, $userId);
-$verifyStmt->execute();
-$verifyResult = $verifyStmt->get_result();
+try {
+    $verifyStmt = $conn->prepare("SELECT id FROM deployment WHERE id = ? AND user_id = ?");
+    if (!$verifyStmt) {
+        throw new Exception("Failed to prepare statement: " . $conn->error);
+    }
+    $verifyStmt->bind_param("ii", $deploymentId, $userId);
+    $verifyStmt->execute();
+    $verifyResult = $verifyStmt->get_result();
 
-if ($verifyResult->num_rows === 0) {
-    echo json_encode(["success" => false, "message" => "Invalid deployment selection"]);
+    if ($verifyResult->num_rows === 0) {
+        ob_end_clean();
+        echo json_encode(["success" => false, "message" => "Invalid deployment selection"]);
+        $verifyStmt->close();
+        exit();
+    }
     $verifyStmt->close();
+} catch (Exception $e) {
+    ob_end_clean();
+    echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
     exit();
 }
-$verifyStmt->close();
 
 // Check if report already exists for this deployment
-$checkStmt = $conn->prepare("SELECT id FROM activity_reports WHERE deployment_id = ? AND user_id = ?");
-$checkStmt->bind_param("ii", $deploymentId, $userId);
-$checkStmt->execute();
-$checkResult = $checkStmt->get_result();
+try {
+    $checkStmt = $conn->prepare("SELECT id FROM activity_reports WHERE deployment_id = ? AND user_id = ?");
+    if (!$checkStmt) {
+        throw new Exception("Failed to prepare statement: " . $conn->error);
+    }
+    $checkStmt->bind_param("ii", $deploymentId, $userId);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
 
-if ($checkResult->num_rows > 0) {
-    echo json_encode(["success" => false, "message" => "You have already submitted a report for this deployment"]);
+    if ($checkResult->num_rows > 0) {
+        ob_end_clean();
+        echo json_encode(["success" => false, "message" => "You have already submitted a report for this deployment"]);
+        $checkStmt->close();
+        exit();
+    }
     $checkStmt->close();
+} catch (Exception $e) {
+    ob_end_clean();
+    echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
     exit();
 }
-$checkStmt->close();
 
 // Handle file uploads
 $uploadedFiles = [];
@@ -79,6 +135,7 @@ if (isset($_FILES['documents']) && !empty($_FILES['documents']['name'][0])) {
     $fileCount = count($_FILES['documents']['name']);
     
     if ($fileCount > 5) {
+        ob_end_clean();
         echo json_encode(["success" => false, "message" => "Maximum 5 files allowed"]);
         exit();
     }
@@ -92,6 +149,7 @@ if (isset($_FILES['documents']) && !empty($_FILES['documents']['name'][0])) {
             
             // Validate file size (5MB max)
             if ($fileSize > 5 * 1024 * 1024) {
+                ob_end_clean();
                 echo json_encode(["success" => false, "message" => "File {$fileName} is too large. Maximum 5MB per file"]);
                 exit();
             }
@@ -99,6 +157,7 @@ if (isset($_FILES['documents']) && !empty($_FILES['documents']['name'][0])) {
             // Validate file type
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx'];
             if (!in_array($fileExt, $allowedExtensions)) {
+                ob_end_clean();
                 echo json_encode(["success" => false, "message" => "File type not allowed: {$fileExt}"]);
                 exit();
             }
@@ -117,46 +176,58 @@ if (isset($_FILES['documents']) && !empty($_FILES['documents']['name'][0])) {
 $supportingDocs = !empty($uploadedFiles) ? json_encode($uploadedFiles) : null;
 
 // Insert activity report
-$stmt = $conn->prepare("
-    INSERT INTO activity_reports 
-    (deployment_id, user_id, event_id, hours_worked, date_of_activity, 
-     activities_performed, challenges_faced, outcomes_achieved, recommendations, 
-     supporting_documents, status, submitted_at) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())
-");
-
-$stmt->bind_param(
-    "iiidsssss",
-    $deploymentId,
-    $userId,
-    $eventId,
-    $hoursWorked,
-    $dateOfActivity,
-    $activitiesPerformed,
-    $challengesFaced,
-    $outcomesAchieved,
-    $recommendations,
-    $supportingDocs
-);
-
-if ($stmt->execute()) {
-    $reportId = $stmt->insert_id;
+try {
+    $stmt = $conn->prepare("
+        INSERT INTO activity_reports 
+        (deployment_id, user_id, event_id, hours_worked, date_of_activity, 
+         activities_performed, challenges_faced, outcomes_achieved, recommendations, 
+         supporting_documents, status, submitted_at) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())
+    ");
     
-    // Optional: Send notification to admins (implement later)
-    // notifyAdminsNewReport($reportId);
+    if (!$stmt) {
+        throw new Exception("Failed to prepare insert statement: " . $conn->error);
+    }
+
+    $stmt->bind_param(
+        "iiidssssss",
+        $deploymentId,
+        $userId,
+        $eventId,
+        $hoursWorked,
+        $dateOfActivity,
+        $activitiesPerformed,
+        $challengesFaced,
+        $outcomesAchieved,
+        $recommendations,
+        $supportingDocs
+    );
+
+    if ($stmt->execute()) {
+        $reportId = $stmt->insert_id;
+        
+        // Optional: Send notification to admins (implement later)
+        // notifyAdminsNewReport($reportId);
+        
+        ob_end_clean();
+        echo json_encode([
+            "success" => true,
+            "message" => "Activity report submitted successfully",
+            "report_id" => $reportId
+        ]);
+    } else {
+        throw new Exception($stmt->error);
+    }
+
+    $stmt->close();
+    $conn->close();
     
-    echo json_encode([
-        "success" => true,
-        "message" => "Activity report submitted successfully",
-        "report_id" => $reportId
-    ]);
-} else {
+} catch (Exception $e) {
+    ob_end_clean();
     echo json_encode([
         "success" => false,
-        "message" => "Error submitting report: " . $stmt->error
+        "message" => "Error submitting report: " . $e->getMessage()
     ]);
+    if (isset($stmt)) $stmt->close();
+    if (isset($conn)) $conn->close();
 }
-
-$stmt->close();
-$conn->close();
-?>

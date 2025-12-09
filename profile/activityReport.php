@@ -35,8 +35,8 @@ if ($tableExists) {
     $deploymentsQuery->execute();
     $deploymentsResult = $deploymentsQuery->get_result();
     $deployments = $deploymentsResult->fetch_all(MYSQLI_ASSOC);
+    $deploymentsQuery->close();
 }
-$deploymentsQuery->close();
 
 // Get user info
 $userQuery = $conn->prepare("SELECT fullName FROM users WHERE id = ?");
@@ -57,27 +57,58 @@ $userQuery->close();
     <link rel="stylesheet" href="style/activityReport.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="logo">
-            <img src="../img/Philippine_Red_Cross_logo.jpg" alt="Red Cross Logo">
-        </div>
-        <a href="profile.php"><i class="fas fa-user"></i> Profile</a>
-        <a href="dashboard.php"><i class="fas fa-chart-line"></i> Dashboard</a>
-        <a href="activityReport.php" style="background: rgba(255, 255, 255, 0.15);"><i class="fas fa-file-alt"></i> Submit Report</a>
-        <a href="myReports.php"><i class="fas fa-folder-open"></i> My Reports</a>
-        <a href="profileSms.php"><i class="fas fa-envelope"></i> Messages</a>
-        <a href="profileMap.php"><i class="fas fa-map-marked-alt"></i> Map</a>
-        <a href="../index.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-    </div>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
 
-    <!-- Menu Toggle -->
-    <button class="menu-toggle" id="menu-toggle">
-        <i class="fas fa-bars"></i>
-    </button>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">✚</div>
+            <div class="logo-text">Philippine Red Cross</div>
+            <div class="logo-subtitle">Volunteer Portal</div>
+        </div>
+
+        <div class="sidebar-nav">
+            <a href="dashboard.php" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="profile.php" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="activityReport.php" class="nav-item active">
+                <span class="nav-icon">📄</span>
+                <span class="nav-text">Submit Report</span>
+            </a>
+            <a href="myReports.php" class="nav-item">
+                <span class="nav-icon">📂</span>
+                <span class="nav-text">My Reports</span>
+            </a>
+            <a href="profileMap.php" class="nav-item">
+                <span class="nav-icon">🗺️</span>
+                <span class="nav-text">Map</span>
+            </a>
+            <a href="report.php" class="nav-item">
+                <span class="nav-icon">📝</span>
+                <span class="nav-text">Report</span>
+            </a>
+            
+            <div class="nav-logout">
+                <a href="#logout" class="nav-item logout" onclick="handleLogout()">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Logout</span>
+                </a>
+            </div>
+        </div>
+    </nav>
 
     <!-- Main Content -->
-    <div class="content">
+    <main class="main-content">
+        <div class="content">
         <div class="header">
             <h1><i class="fas fa-file-alt"></i> Submit Activity Report</h1>
             <p>Document your volunteer activities and contributions</p>
@@ -224,8 +255,23 @@ $userQuery->close();
                 <?php endif; ?>
             </form>
         </div>
-    </div>
+        </div>
+    </main>
 
     <script src="js/activityReport.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '../index.php';
+            }
+        }
+    </script>
 </body>
 </html>

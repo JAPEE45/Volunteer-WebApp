@@ -1,6 +1,18 @@
 /* My Reports Styles - extends activityReport.css */
 @import url('activityReport.css');
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header h1 {
+  margin: 0;
+}
+
 .btn-new-report {
   display: inline-flex;
   align-items: center;
@@ -13,6 +25,7 @@
   font-weight: 700;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+  white-space: nowrap;
 }
 
 .btn-new-report:hover {

@@ -26,8 +26,8 @@ SELECT
     u.account_status,
     u.status,
     u.age,
-    u.address,
-    u.mobile,
+    u.district_barangay_village as address,
+    u.mobile_number as mobile,
     e.location AS deployedLocation,
     e.eventName
     {$roleSelect}

@@ -46,7 +46,7 @@ function recallVolunteers($conn, $sendSmsNotification = false) {
         
         // Find volunteers deployed to this event
         $findDeployed = $conn->prepare("
-            SELECT DISTINCT d.user_id, u.fullName, u.mobile
+            SELECT DISTINCT d.user_id, u.fullName, u.mobile_number as mobile
             FROM deployment d
             JOIN users u ON d.user_id = u.id
             WHERE d.event_id = ?

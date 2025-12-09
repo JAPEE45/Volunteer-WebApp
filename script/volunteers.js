@@ -122,9 +122,9 @@ const volunteerRoles = [
 // Deploy Modal HTML - Single volunteer deployment with role
 const deployModalHTML = `
   <div id="deployModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 9999; align-items: center; justify-content: center; animation: fadeIn 0.3s ease;">
-    <div style="background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); max-width: 550px; width: 90%; max-height: 90vh; overflow: hidden; animation: slideUp 0.4s ease; position: relative;">
+    <div style="background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); width: 550px; max-width: 90%; height: auto; max-height: 90vh; display: flex; flex-direction: column; animation: slideUp 0.4s ease; position: relative;">
       
-      <div style="background: linear-gradient(135deg, #dc143c 0%, #a00000 100%); color: white; padding: 2rem; position: relative; overflow: hidden;">
+      <div style="background: linear-gradient(135deg, #dc143c 0%, #a00000 100%); color: white; padding: 2rem; position: relative; overflow: hidden; flex-shrink: 0;">
         <div style="content: '✚'; position: absolute; font-size: 8rem; opacity: 0.1; right: -20px; top: -20px; transform: rotate(15deg);">✚</div>
         
         <button onclick="closeDeployModal()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255, 255, 255, 0.2); border: 2px solid white; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; line-height: 1;">&times;</button>
@@ -137,7 +137,7 @@ const deployModalHTML = `
         <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.9;">Assign volunteer to emergency response event</p>
       </div>
       
-      <div style="padding: 2rem;">
+      <div style="padding: 2rem; flex: 1; overflow-y: auto; min-height: 0;">
         <div style="background: linear-gradient(135deg, #fff5f5 0%, #fee 100%); border: 2px solid #dc143c; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;">
           <div style="content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #dc143c 0%, #ff4757 100%);"></div>
           
@@ -169,13 +169,13 @@ const deployModalHTML = `
         </div>
       </div>
       
-      <div style="padding: 1.5rem 2rem; background: #f7fafc; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; justify-content: flex-end;">
-        <button onclick="closeDeployModal()" style="padding: 0.875rem 2rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem; background: white; color: #64748b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;">
+      <div style="padding: 1.5rem 2rem; background: #f7fafc; border-top: 2px solid #e2e8f0; display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap; flex-shrink: 0;">
+        <button onclick="closeDeployModal()" style="padding: 0.875rem 2rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem; background: white; color: #64748b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <span>✕</span>
           <span>Cancel</span>
         </button>
-        <button onclick="confirmDeploy()" style="padding: 0.875rem 2rem; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #dc143c 0%, #a00000 100%); color: white; box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;">
-          <span>✓</span>
+        <button onclick="confirmDeploy()" id="mainDeployButton" style="padding: 0.875rem 2rem; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; display: flex !important; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #dc143c 0%, #a00000 100%); color: white; box-shadow: 0 4px 12px rgba(220, 20, 60, 0.4); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; visibility: visible !important; opacity: 1 !important;">
+          <span>🚀</span>
           <span>Deploy Now</span>
         </button>
       </div>
@@ -1231,12 +1231,22 @@ async function openInfoModal(volunteer) {
   // Set confirm and reject button handlers
   const acpt = document.getElementById("confirmBtn")
   const rjct = document.getElementById("rejectBtn")
+  const deployButton = document.getElementById("deployBtn")
+  
   if(data.account_status == "accepted"){
+    // Hide confirm/reject, show deploy button for accepted volunteers
     acpt.style.display = "none";
-    rjct.style.display = "none"
+    rjct.style.display = "none";
+    deployButton.style.display = "inline-block";
+    deployButton.onclick = () => {
+      closeUserModal();
+      deployNow(data.id);
+    };
   }else{
-     acpt.style.display = "inline";
-    rjct.style.display = "inline"
+    // Show confirm/reject, hide deploy for pending volunteers
+    acpt.style.display = "inline";
+    rjct.style.display = "inline";
+    deployButton.style.display = "none";
   }
   acpt.onclick = () => updateStatus(data.id, "accepted", "", data.mobile, data.fullName);
   rjct.onclick = () => openReasonModal(data.id);

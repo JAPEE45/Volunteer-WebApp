@@ -57,13 +57,17 @@ $result = $res->fetch_assoc();
         <span class="nav-icon">👤</span>
         <span class="nav-text">Profile</span>
       </a>
+      <a href="activityReport.php" class="nav-item">
+        <span class="nav-icon">📄</span>
+        <span class="nav-text">Submit Report</span>
+      </a>
+      <a href="myReports.php" class="nav-item">
+        <span class="nav-icon">📂</span>
+        <span class="nav-text">My Reports</span>
+      </a>
       <a href="profileMap.php" class="nav-item">
         <span class="nav-icon">🗺️</span>
         <span class="nav-text">Map</span>
-      </a>
-      <a href="report.php" class="nav-item">
-        <span class="nav-icon">📝</span>
-        <span class="nav-text">Report</span>
       </a>
       
       <div class="nav-logout">
@@ -83,11 +87,11 @@ $result = $res->fetch_assoc();
       <div class="header-content">
         <div class="welcome-text">
           <span>👋</span>
-          <span>Welcome Back, <span id="volunteerName"><?php echo $result['firstName']." ".$result['middleName']." ".$result['lastName']; ?></span></span>
+          <span>Welcome Back, <span id="volunteerName"><?php echo ($result['given_name'] ?? $result['firstName'] ?? '')." ".($result['middle_name'] ?? $result['middleName'] ?? '')." ".($result['last_name'] ?? $result['lastName'] ?? ''); ?></span></span>
         </div>
         <div class="volunteer-info">
           <span>Volunteer ID: <strong id="volunteerId">VL-<?php echo str_pad($user_id, 4, '0', STR_PAD_LEFT); ?></strong></span> • 
-          <span>Member since: <strong id="memberSince"><?php echo $result['createdAt'];?></strong></span>
+          <span>Member since: <strong id="memberSince"><?php echo $result['created_at'] ?? $result['createdAt'] ?? '';?></strong></span>
         </div>
       </div>
     </div>

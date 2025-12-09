@@ -798,6 +798,7 @@
     <div class="modal-actions">
       <button id="confirmBtn" class="confirm-btn">Confirm</button>
       <button id="rejectBtn" class="reject-btn">Reject</button>
+      <button id="deployBtn" class="submit-btn" style="display:none;">🚀 Deploy Volunteer</button>
       <button onclick="closeUserModal()" class="close-btn">Close</button>
     </div>
   </div>

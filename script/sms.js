@@ -84,15 +84,15 @@ window.viewVolunteer = function(index) {
 
       <h3>Personal Information</h3>
       <div class="grid">
-        <div><b>First Name:</b> ${v.firstName}</div>
-        <div><b>Middle Name:</b> ${v.middleName}</div>
-        <div><b>Last Name:</b> ${v.lastName}</div>
-        <div><b>Birth Place:</b> ${v.birthPlace}</div>
-        <div><b>Sex:</b> ${v.sex}</div>
-        <div><b>Date of Birth:</b> ${v.dob}</div>
-        <div><b>Religion:</b> ${v.religion}</div>
-        <div><b>Height / Weight:</b> ${v.height} cm / ${v.weight} kg</div>
-        <div><b>Civil Status:</b> ${v.civilStatus}</div>
+        <div><b>First Name:</b> ${v.given_name || v.firstName || 'N/A'}</div>
+        <div><b>Middle Name:</b> ${v.middle_name || v.middleName || 'N/A'}</div>
+        <div><b>Last Name:</b> ${v.family_name || v.lastName || 'N/A'}</div>
+        <div><b>Birth Place:</b> ${v.birth_place || v.birthPlace || 'N/A'}</div>
+        <div><b>Sex:</b> ${v.sex || 'N/A'}</div>
+        <div><b>Date of Birth:</b> ${v.dob || 'N/A'}</div>
+        <div><b>Religion:</b> ${v.religion || 'N/A'}</div>
+        <div><b>Height / Weight:</b> ${v.height || 'N/A'} cm / ${v.weight || 'N/A'} kg</div>
+        <div><b>Civil Status:</b> ${v.civil_status || v.civilStatus || 'N/A'}</div>
         <div><b>Spouse:</b> ${v.spouse}</div>
         <div><b>Children:</b> ${v.children}</div>
         <div class="wide"><b>Address:</b> ${v.address}</div>

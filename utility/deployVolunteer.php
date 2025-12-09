@@ -49,7 +49,7 @@ if ($stmt->execute()) {
     $dinfo = $conn->prepare("
         SELECT 
             u.fullName, 
-            u.mobile, 
+            u.mobile_number as mobile, 
             e.location, 
             e.date, 
             e.eventName 
