@@ -17,6 +17,21 @@ toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("active");
 });
 
+//--------- AUTO RECALL CHECK ----------
+// Automatically check and recall volunteers from ended events on page load
+async function checkAndRecallVolunteers() {
+  try {
+    const res = await fetch('./utility/recallVolunteers.php');
+    const result = await res.json();
+    if (result.recalled_count > 0) {
+      console.log(`Auto-recalled ${result.recalled_count} volunteers from completed events`);
+    }
+  } catch (error) {
+    console.error('Error checking volunteer recalls:', error);
+  }
+}
+checkAndRecallVolunteers();
+
 //--------- PIE CHART ----------
 async function depStatus(){
     const res = await fetch("./utility/getDeployCount.php");

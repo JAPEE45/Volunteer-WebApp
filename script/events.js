@@ -18,6 +18,23 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebar.classList.toggle("active");
   });
 
+  //--------- AUTO RECALL CHECK ----------
+  // Check for ended events and recall volunteers on page load
+  async function checkAndRecallVolunteers() {
+    try {
+      const res = await fetch('./utility/recallVolunteers.php');
+      const result = await res.json();
+      if (result.recalled_count > 0) {
+        console.log(`Auto-recalled ${result.recalled_count} volunteers from completed events`);
+      }
+    } catch (error) {
+      console.error('Error checking volunteer recalls:', error);
+    }
+  }
+  
+  // Run recall check on page load
+  checkAndRecallVolunteers();
+
   //--------- LOAD EVENTS ----------
   async function loadEvents() {
     tableBody.innerHTML = "";
@@ -25,9 +42,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const events = await ev.json();
     console.log(events)
     events.forEach((event, index) => {
+      // Determine status badge color
+      let statusBadge = '';
+      const status = event.status || 'upcoming';
+      if (status === 'active') {
+        statusBadge = '<span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 8px;">Active</span>';
+      } else if (status === 'completed') {
+        statusBadge = '<span style="background: #6b7280; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 8px;">Completed</span>';
+      } else {
+        statusBadge = '<span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 8px;">Upcoming</span>';
+      }
+      
       let row = document.createElement("tr");
       row.innerHTML = `
-        <td class="event-name">${event.eventName}</td>
+        <td class="event-name">${event.eventName}${statusBadge}</td>
         <td>${event.location}</td>
         <td><button class="delete-btn" data-index="${event.id}">🗑</button></td>
       `;
@@ -72,7 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
       location: document.getElementById("eventLocation").value,
       dateTime: document.getElementById("eventDateTime").value,
       latitude: document.getElementById("latitude").value,
-      longitude: document.getElementById("longitude").value
+      longitude: document.getElementById("longitude").value,
+      duration: parseInt(document.getElementById("eventDuration").value) || 8
     };
     const a = await fetch("./utility/addEvent.php",{
       method:"POST",
@@ -81,11 +110,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }) 
     const j = await a.json();
     console.log(j)
-    let events = JSON.parse(localStorage.getItem("events")) || [];
-    events.push(newEvent);
-    localStorage.setItem("events", JSON.stringify(events));
+    
+    if (j.success) {
+      alert(`Event created successfully!\nEnd Date: ${new Date(j.end_date).toLocaleString()}`);
+    }
 
     eventForm.reset();
+    document.getElementById("eventDuration").value = "8"; // Reset to default
     addEventModal.classList.add("hidden");
     loadEvents();
   });
@@ -95,6 +126,28 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("viewName").textContent = event.eventName;
     document.getElementById("viewLocation").textContent = event.location;
     document.getElementById("viewDateTime").textContent = new Date(event.date).toLocaleString();
+    
+    // Display duration
+    const duration = event.duration || 8;
+    document.getElementById("viewDuration").textContent = duration;
+    
+    // Display end date
+    const endDate = event.end_date ? new Date(event.end_date).toLocaleString() : 'Not calculated';
+    document.getElementById("viewEndDate").textContent = endDate;
+    
+    // Display status with color
+    const status = event.status || 'upcoming';
+    const statusEl = document.getElementById("viewStatus");
+    statusEl.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+    statusEl.style.fontWeight = 'bold';
+    if (status === 'active') {
+      statusEl.style.color = '#10b981';
+    } else if (status === 'completed') {
+      statusEl.style.color = '#6b7280';
+    } else {
+      statusEl.style.color = '#f59e0b';
+    }
+    
     viewEventModal.classList.remove("hidden");
   }
 

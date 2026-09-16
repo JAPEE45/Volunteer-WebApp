@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style/register.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>Red Cross Volunteer Registration</title>
+  <link rel="stylesheet" href="./style/register.css">
+  
 </head>
 <body>
   <div class="header">
@@ -13,6 +15,12 @@
   </div>
 
   <form id="registrationForm" class="form-table">
+    <div class="progress-indicator">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="progress-text" id="progressText">0% Complete</span>
+    </div>
 
     <h3>Personal Information</h3>
     <div class="grid">
@@ -28,7 +36,7 @@
         </select>
       </div>
       <div><label>Date of Birth</label><input name="date_of_birth" type="date" id="dob"></div>
-      <div><label>Age</label><input name="age" type="number" id="age"></div>
+      <input name="age" type="hidden" id="age">
       <div><label>Religion</label><input name="religion" type="text" id="religion"></div>
       <div><label>Height (cm)</label><input name="height" type="number" id="height"></div>
       <div><label>Weight (kg)</label><input name="weight" type="number" id="weight"></div>
@@ -39,7 +47,6 @@
       <div><label>Landline Number</label><input type="text" id="landline"></div>
       <div class="wide"><label>Complete Address</label><input type="text" id="address"></div>
     </div>
-
 
     <h3>Medical</h3>
     <div class="grid">
@@ -105,9 +112,68 @@
       </div>
     </div>
 
-    <button type="submit" class="submit-btn">SUBMIT</button>
+    <button type="submit" class="submit-btn">
+      <i class="fas fa-paper-plane"></i> SUBMIT REGISTRATION
+    </button>
+    
+    <div class="success-message" id="successMessage">
+      <i class="fas fa-check-circle"></i>
+      Registration submitted successfully!
+    </div>
   </form>
 
   <script src="script/register.js"></script>
+  <script>
+    const form = document.getElementById('registrationForm');
+    const inputs = form.querySelectorAll('input:not([type="hidden"]), select');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+
+    function updateProgress() {
+      let filled = 0;
+      inputs.forEach(input => {
+        if (input.value.trim() !== '') filled++;
+      });
+      const percentage = Math.round((filled / inputs.length) * 100);
+      progressFill.style.width = percentage + '%';
+      progressText.textContent = percentage + '% Complete';
+    }
+
+    inputs.forEach(input => {
+      input.addEventListener('input', updateProgress);
+      input.addEventListener('change', updateProgress);
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.submit-btn');
+      btn.classList.add('loading');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SUBMITTING...';
+      setTimeout(() => {
+        btn.classList.remove('loading');
+        btn.innerHTML = '<i class="fas fa-check"></i> SUBMITTED';
+        document.getElementById('successMessage').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 2000);
+    });
+    document.getElementById('dob').addEventListener('change', function() {
+      const dob = new Date(this.value);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+      document.getElementById('age').value = age;
+    });
+
+    // Smooth scroll to sections
+    document.querySelectorAll('h3').forEach((heading, index) => {
+      heading.style.cursor = 'pointer';
+      heading.addEventListener('click', function() {
+        this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
 </body>
 </html>

@@ -1,6 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registrationForm");
 
+  const dobInput = document.getElementById("dob");
+  const ageInput = document.getElementById("age");
+
+  if (dobInput) {
+    dobInput.addEventListener("change", () => {
+      const dob = new Date(dobInput.value);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+      ageInput.value = age;
+    });
+  }
+
   if (form) {
    form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -63,9 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(j);
 
   alert("Registration submitted! Awaiting approval in SMS Alerts.");
-    setTimeout(() => {
-      window.location.href = "/Volunteer-webapp/"
-    }, 5000);
+  window.location.reload();
 });
 
   }
