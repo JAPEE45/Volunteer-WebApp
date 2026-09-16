@@ -1,160 +1,153 @@
-# 🚑 Red Cross Volunteer Management Web Application
-> **Connecting Compassion with Action — Streamlined Volunteer Deployment & Disaster Response Management.**
+# 🚑 Philippine Red Cross Volunteer Management System
 
-[![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+> **Connecting Compassion with Action — A GIS-Integrated Platform for Humanitarian Volunteer Management, Disaster Deployment, and Field Activity Reporting.**
+
+[![PHP](https://img.shields.io/badge/PHP-7.4%20|%208.x-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-MariaDB-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-Interactive%20Maps-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com/)
 [![Chart.js](https://img.shields.io/badge/Chart.js-Analytics-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)](https://www.chartjs.org/)
-[![Status](https://img.shields.io/badge/Status-Completed%20(Oct%202025)-success?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Completed%20(December%202025)-success?style=for-the-badge)]()
+
+---
+
+## 🎓 Academic Background
+
+This project was conceived, designed, and developed by **college students** from the:
+
+🏛️ **Catanduanes State University (CSU)**  
+🏫 **College of Information and Communications Technology (CICT)**  
+📍 *Virac, Catanduanes, Philippines*
+
+* **Completion Date:** December 9, 2025  
+* **Repository Final Integration:** September 2026  
+* **Purpose:** Academic Capstone / Software Engineering Project addressing community disaster preparedness and humanitarian response workflows in the province of Catanduanes.
 
 ---
 
 ## 📖 Overview
 
-The **Red Cross Volunteer Management Web Application** is a specialized, end-to-end platform engineered to simplify and accelerate humanitarian workforce administration. Designed with the operations of humanitarian organizations like the **Philippine Red Cross** in mind, the platform bridges the gap between aspiring community volunteers and disaster response coordinators.
+The **Philippine Red Cross Volunteer Management System** is an end-to-end web application built to modernize and streamline volunteer mobilization, disaster response dispatching, and post-incident field reporting. Designed specifically to support local chapters such as the **Philippine Red Cross - Catanduanes Chapter**, the platform eliminates manual paperwork bottlenecks and bridges the gap between community volunteers and emergency coordinators.
 
-From multi-step digital applicant vetting and automated credential generation to geospatial deployment tracking and post-incident reporting, this system eliminates manual paperwork bottlenecks and provides chapter coordinators with real-time operational clarity during critical relief efforts.
+From multi-step digital intake and automated SMS credential delivery to geospatial deployment tracking across municipalities (Virac, San Andres, Pandan, Bato, San Miguel, etc.), this system provides emergency response teams with real-time operational visibility and accountability.
 
 ---
 
 ## 🎯 Why Use This App? (User Benefits)
 
 ### 👥 Target Users
-* **Chapter Administrators & Disaster Response Coordinators:** Staff who oversee volunteer onboarding, organize humanitarian operations, assign personnel to municipalities, and coordinate disaster response efforts.
-* **Community Volunteers & Students:** Civic-minded individuals, youth leaders, and medical/relief volunteers looking for a transparent, organized way to register, view deployments, and submit field reports.
+* **Chapter Administrators & Disaster Relief Coordinators:** Personnel responsible for vetting volunteer applications, organizing relief drives, dispatching teams to affected zones, and reviewing mission activity reports.
+* **Community Volunteers, Youth Leaders & College Students:** Civic-minded individuals looking for a transparent, organized way to register, view active deployments, receive emergency notices, and submit field documentation.
 
 ### 💡 Main Problems Solved
-* **Elimination of Paper-Heavy Vetting:** Traditional volunteer enrollment relies heavily on physical paper forms, manual filing, and lost certificates. The app provides comprehensive digital intake with automated tracking of skills, blood types, emergency contacts, and credential file uploads.
-* **Geographic Blind Spots in Personnel Dispatch:** When a typhoon or emergency strikes, administrators often struggle to visualize where volunteers are positioned. The integrated interactive GIS mapping module allows pinpointing deployment locations across municipalities (e.g., Catanduanes chapter operations: Virac, San Andres, Pandan, Bato, etc.).
-* **Frictionless Credential Provisioning:** Instead of manual communication overhead, the application automatically provisions secure system credentials upon applicant approval, allowing swift mobilization.
-* **Accountability & Field Reporting:** Deployed volunteers have a direct digital avenue to submit official situational and post-action activity reports (`.pdf`, `.docx`, `.doc`) directly to coordinators.
+* 📋 **Paper-Heavy Registration & Lost Documents:** Eliminates physical forms and lost folders by offering structured digital registration capturing personal data, blood types, medical flags, emergency contacts, skills, and PDF/image identification.
+* 🗺️ **Geographic Blind Spots During Emergencies:** In typhoon-prone regions like Catanduanes, coordinators often struggle to locate where responders are stationed. An interactive GIS map pinpoints municipal deployment zones, event venues, and volunteer headcounts in real time.
+* 🔐 **Manual Credential Bottlenecks:** Coordinators no longer need to manually draft emails or paper notices. Approving an applicant automatically generates high-entropy credentials and instantly dispatches them to the volunteer's phone via SMS.
+* 📝 **Accountability & Mission Reporting:** Deployed volunteers have a secure digital portal to log service hours, write mission summaries, and upload field proof (`.pdf`, `.docx`, `.png`, `.jpg`) for official admin evaluation and verification.
 
 ---
 
 ## ✨ Key Features
 
-### 🛡️ Administrative Command Center
-* **Live Analytics Dashboard:** Real-time visual metrics powered by Chart.js showcasing volunteer distribution, active deployments, upcoming relief events, and system alerts.
-* **Volunteer Application Vetting & Workflow:** Review pending volunteer records, inspect uploaded verification documents and certificates, and execute one-click approvals or rejections.
-* **Automated Secure Credential Dispatch:** Automatically generates randomized usernames and high-entropy passwords upon application acceptance, granting instant portal access.
-* **Geospatial Volunteer & Event Mapping:** Interactive OpenStreetMap/Leaflet visualization displaying municipal deployment zones, active emergency events, and personnel headcounts per locality.
-* **Relief Event Coordination:** Create, schedule, geolocate (latitude/longitude), and manage community relief and blood donation drives with automated volunteer roster assignments.
-* **SMS Alert Logging:** Dedicated monitoring interface for tracking outgoing urgent dispatch notices and notifications sent to field volunteers.
+### 🛡️ Administrator Command Center
+* **Live Analytics Dashboard:** Visual operational metrics displaying volunteer counts, active missions, municipal distribution, and pending tasks.
+* **Application Vetting & Status Control:** Inspect comprehensive volunteer dossiers and one-click approve, decline, or place applications on hold with custom remarks.
+* **Automated SMS & Credential Dispatch:** Integrated SMS dispatch engine sends welcome notifications, generated usernames/passwords, and deployment alerts directly to volunteers' mobile devices.
+* **Geospatial Incident & Mission Map:** Interactive OpenStreetMap/Leaflet visualization displaying municipal relief operations and deployment clusters across Catanduanes.
+* **Event Coordination & Roster Deployment:** Create humanitarian missions with custom dates, descriptions, and GPS markers, then deploy available personnel with assigned roles.
+* **Activity Report Review System:** Centralized review dashboard to inspect volunteer post-mission reports, review attached proof files, and formally approve or reject submissions.
 
 ### 🧑‍🤝‍🧑 Volunteer Self-Service Portal
-* **Comprehensive Registration:** Detailed digital intake covering personal background, emergency health/medication records, educational history, civic affiliations, and supporting document uploads.
-* **Personalized Profile Management:** View membership status, update profile pictures, and maintain personal credentials.
-* **Interactive Mission Map:** Explore upcoming event locations, deployment stations, and territorial relief coverage across chapters.
-* **Field Report Submission Center:** Secure multi-file upload utility (`.pdf`, `.doc`, `.docx`) enabling deployed personnel to submit post-mission documentation and situational updates.
+* **Digital Profile & Service Record:** View active deployment status, personal profile details, contact information, and service history.
+* **Mission Map View:** Dedicated interactive map showing assigned deployment sites, coordinates, and nearby event hubs.
+* **Post-Deployment Activity Reporting:** Interactive submission module allowing volunteers to record hours rendered, describe duties performed, and attach supporting files (`.pdf`, `.doc`, `.docx`, `.png`, `.jpg`).
+* **Report Tracker ("My Reports"):** Live status tracker showing pending, approved, or rejected field reports with administrator feedback notes.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Domain | Technology / Library | Purpose |
+| Category | Technology | Description |
 | :--- | :--- | :--- |
-| **Frontend** | HTML5, Modern CSS3 | Responsive layouts, CSS grid systems, and custom modular styling |
-| | Vanilla JavaScript (ES6+) | Asynchronous data fetching (`Fetch API`), DOM manipulation, dynamic modals |
-| | [Leaflet.js](https://leafletjs.com/) | Interactive GIS mapping with custom markers, coordinates, and popups |
-| | [Chart.js](https://www.chartjs.org/) | Dynamic charting for volunteer distribution and event analytics |
-| | [Font Awesome 5/6](https://fontawesome.com/) | Consistent, modern iconography across navigation and interface components |
-| **Backend** | PHP 8.2 | RESTful utility endpoints, session handling, authentication, and file upload processing |
-| | Prepared Statements (`mysqli`) | SQL injection mitigation and reliable database transactions |
-| **Database** | MySQL / MariaDB | Relational schema storing users, accounts, deployments, and scheduled events |
-| **Environment / Tools** | XAMPP / Apache | Local web server and runtime environment |
-| | phpMyAdmin | Visual database administration and SQL import management |
-| | Git & GitHub | Distributed version control and source code repository |
+| **Frontend** | HTML5, CSS3, Vanilla JavaScript (ES6+) | Responsive user interface, interactive forms, and dynamic DOM manipulation |
+| **Backend** | PHP (Procedural & Object-Oriented APIs) | Business logic, session authentication, file processing, and REST-style endpoints |
+| **Database** | MySQL / MariaDB (`mysqli`) | Relational database schema with prepared statements for SQL injection defense |
+| **Mapping & GIS** | [Leaflet.js](https://leafletjs.com/) & OpenStreetMap | Geospatial visualization of municipal deployment markers and coordinates |
+| **Data Visualization** | [Chart.js](https://www.chartjs.org/) | Dynamic bar charts, doughnut statistics, and live dashboard counters |
+| **Messaging** | iTexMo SMS Gateway API | Automated cellular notifications for credentials and deployment alerts |
+| **Runtime Environment** | Apache (XAMPP / LAMP / WAMP) | Local server hosting and web deployment |
 
 ---
 
 ## 🔄 How to Use the System (Workflow)
 
-```
- [ Volunteer ]                        [ Chapter Admin ]
-       |                                     |
- 1. Submit Registration Form                 |
-    (Bio, Skills, Documents)                 |
-       │                                     |
-       ▼                                     ▼
- 2. Application Pending ─────────► 3. Review Application & Documents
-                                             │
-                                     4. Approve Application
-                                        (Auto-generates Username/Password)
-                                             │
- 5. Sign In to Volunteer Portal ◄────────────┘
-       │
- 6. View Assigned Missions / Map
-       │
- 7. Submit Field & Incident Reports
-       │
-       ▼
- 8. Operations Monitored via Admin Dashboard
+```mermaid
+flowchart LR
+    A["1. Volunteer Registration"] --> B["2. Admin Vetting & SMS"]
+    B --> C["3. Event Creation & Deployment"]
+    C --> D["4. Mission Execution & Map"]
+    D --> E["5. Field Activity Report"]
+    E --> F["6. Admin Verification & Approval"]
 ```
 
-1. **Volunteer Registration:** The applicant navigates to the public portal (`register.php`), fills in their personal details, emergency health data, skills, and attaches required identification or certification files.
-2. **Administrator Evaluation:** The coordinator logs into the admin panel (`login.php`), accesses the **Volunteers** and **SMS/Applications** queue, and reviews applicant qualifications and attached credentials.
-3. **Approval & Account Creation:** Upon administrator approval, the system triggers the internal credential generator (`utility/updateVolunteerStatus.php`), assigning unique user access credentials (`account` table).
-4. **Volunteer Portal Login:** The volunteer logs into their personalized portal (`profile/profile.php`) to view verified credentials and chapter announcements.
-5. **Event Scheduling & Deployment:** Admins schedule relief drives under **Events** (`events.php`) with specific GPS coordinates, and deploy available volunteers to targeted zones (`Virac`, `San Andres`, `Pandan`, etc.).
-6. **Live GIS Monitoring:** Both coordinators and volunteers interact with Leaflet-powered maps to inspect active relief operations and assigned volunteer distributions.
-7. **Post-Action Reporting:** Deployed volunteers upload incident and accomplishment reports through the **Report** section (`profile/report.php`) for administrative review and archiving.
+1. **Volunteer Registration:**
+   * An applicant visits `register.php` and completes the digital registration form (personal data, educational background, medical notes, emergency contacts, skills, and verification documents).
+2. **Administrator Vetting & Credential Generation:**
+   * The coordinator logs into `login.php`, navigates to **Volunteers** (`volunteers.php`), and reviews the applicant's profile and documents.
+   * Upon clicking **Accept**, the backend triggers `utility/updateVolunteerStatus.php`, creating an account and sending an automated SMS to the volunteer with their temporary login credentials.
+3. **Event Planning & Deployment Assignment:**
+   * The administrator creates a disaster relief or community event under **Events** (`events.php`) with specified geographic coordinates.
+   * Personnel are deployed to the event with assigned roles via `utility/deployVolunteer.php`.
+4. **Mission Execution & GIS Tracking:**
+   * Volunteers log in to `profile/profile.php` and view mission details.
+   * Both coordinators and volunteers track active missions on the interactive map (`profileMap.php` / `map.php`).
+5. **Post-Deployment Activity Reporting:**
+   * After concluding field work, the volunteer visits `profile/activityReport.php`, selects their completed deployment, logs hours rendered, writes a mission summary, and uploads supporting field evidence (`.pdf`, `.docx`, images).
+6. **Administrator Review & Verification:**
+   * Administrators review submitted reports in `adminActivityReports.php`, view submitted documentation, and assign an **Approved** or **Rejected** status with evaluator feedback.
 
 ---
 
-## 🚀 Installation & Setup Instructions
+## 💻 Installation & Setup Instructions
 
-Follow these instructions to set up and run the application on your local machine using **XAMPP** (or any AMP stack).
+Follow these steps to set up and run the application on your local machine using **XAMPP** (or any LAMP/WAMP environment).
 
-### Prerequisites
-* [XAMPP](https://www.apachefriends.org/) (PHP >= 8.0, Apache, and MySQL / MariaDB)
-* [Git](https://git-scm.com/) installed on your machine
-* A modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge)
+### 1. Prerequisites
+* [XAMPP](https://www.apachefriends.org/) (with **Apache** and **PHP 7.4+** or **PHP 8.x**)
+* **MySQL / MariaDB**
+* Modern Web Browser (Chrome, Firefox, Edge)
+* Git installed
 
----
-
-### Step-by-Step Installation
-
-#### 1. Clone the Repository
-Clone the repository directly into your local web server's root directory (`htdocs` for XAMPP):
+### 2. Clone the Repository
+Clone the repository directly into your web server root (e.g., `C:/xampp/htdocs/` on Windows):
 
 ```bash
-# Navigate to your XAMPP htdocs directory
-cd C:/xampp/htdocs
-
-# Clone the project repository
+cd C:/xampp/htdocs/
 git clone https://github.com/JAPEE45/Volunteer-WebApp.git
 ```
 
-#### 2. Start Apache and MySQL Services
-Open the **XAMPP Control Panel** and click **Start** next to:
-* **Apache**
-* **MySQL**
-
-#### 3. Set Up the Database
-1. Open your web browser and navigate to phpMyAdmin:
+### 3. Setup the Database
+1. Launch **XAMPP Control Panel** and start **Apache** and **MySQL**.
+2. Open your browser and navigate to **phpMyAdmin**:
    ```
    http://localhost/phpmyadmin/
    ```
-2. Create a new database named:
+3. Create a new database named:
    ```sql
    volunteer-web
    ```
-3. Click on the newly created `volunteer-web` database, go to the **Import** tab.
-4. Click **Choose File** and select the SQL dump file located in the root of the project:
-   ```
-   volunteer-web (1).sql
-   ```
-5. Click **Import** (or **Go**) at the bottom of the page to execute and create the tables.
+4. Click on the newly created `volunteer-web` database, go to the **Import** tab, and import:
+   * 📄 [`volunteer-web (7).sql`](file:///C:/xampp/htdocs/Volunteer-WebApp/volunteer-web%20%287%29.sql) *(Latest comprehensive schema and data)*
+5. *(Optional)* If testing the activity reports module separately, you may also review [`database_activity_reports.sql`](file:///C:/xampp/htdocs/Volunteer-WebApp/database_activity_reports.sql).
 
-#### 4. Configure Database Connection (Optional)
-If your local MySQL uses custom credentials, open `utility/db.php` in a text editor and update the connection parameters:
+### 4. Configure Database Credentials
+Verify your database connection settings in [`utility/db.php`](file:///C:/xampp/htdocs/Volunteer-WebApp/utility/db.php):
 
 ```php
 <?php
-$host = "localhost";      
-$user = "root";          // Your MySQL username (default: root)
-$pass = "";              // Your MySQL password (default: empty)
-$dbname = "volunteer-web";  
+$host = "localhost";
+$user = "root";       // Default XAMPP username
+$pass = "";           // Default XAMPP password (leave empty)
+$dbname = "volunteer-web";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 
@@ -164,39 +157,30 @@ if ($conn->connect_error) {
 ?>
 ```
 
-#### 5. Launch the Web Application
-Open your web browser and navigate to:
+### 5. Configure File Upload Permissions
+Ensure that the `uploads/` and `uploads/activity_reports/` folders exist and are writable by the web server.
+
+### 6. Run the Application
+Open your browser and navigate to:
 ```
-http://localhost/Volunteer-WebApp/
+http://localhost/Volunteer-WebApp/index.php
 ```
-* **Landing Page:** `http://localhost/Volunteer-WebApp/index.html` or `index.php`
+* **Landing Page:** `http://localhost/Volunteer-WebApp/landingPage.php`
 * **Sign In:** `http://localhost/Volunteer-WebApp/login.php`
 * **Volunteer Registration:** `http://localhost/Volunteer-WebApp/register.php`
 
 ---
 
-### 🔑 Default Demo Accounts (from database seed)
-
-| Role | Username | Password | Notes |
-| :--- | :--- | :--- | :--- |
-| **Admin** | `admin123` | `pass@123` | Full access to Admin Dashboard, Map, Events, and Volunteers |
-| **Volunteer** | `userD9BBBB` | `TDC{89[S)oa#` | Access to Volunteer Profile, Map, and Report Uploads |
-
----
-
-## 🎓 Academic Background & Project Credits
-
-This application was conceptualized, designed, and developed as an academic capstone/software project by a college student from:
-
-🏛️ **Osmeña Colleges**  
-📍 *Masbate City, Masbate, Philippines*  
-👤 **Developer:** [Jasper Fernandez / @JAPEE45](https://github.com/JAPEE45)  
-📅 **Date Completed:** **October 11, 2025**  
-
-> *"Dedicated to supporting volunteer organizations and frontline humanitarians who bring hope and relief to communities in times of disaster."*
+## 🔒 Security Best Practices Implemented
+* **SQL Injection Prevention:** Parameterized SQL queries using `mysqli` prepared statements across all API endpoints.
+* **Session Protection:** Role-based access control checks (`$_SESSION['user_type']`) guarding admin and volunteer routes.
+* **Sanitized File Uploads:** Server-side file extension, MIME type, and size validation on user document submissions.
+* **API Error Encapsulation:** Clean JSON responses for client-side consumption without revealing underlying server stack traces.
 
 ---
 
-## 📄 License & Disclaimer
+## 👥 Contributors & Acknowledgements
 
-This project was developed for educational and community service purposes under academic evaluation. Logos and trademarks of the **Philippine Red Cross** belong to their respective registered owners and are utilized in this project strictly in an academic and demonstrative context.
+* **Student Developers:** College of Information and Communications Technology (CICT), Catanduanes State University (CSU)
+* **Partner Organization Reference:** Philippine Red Cross (PRC)
+* **Icons & Maps:** [Font Awesome](https://fontawesome.com/), [Leaflet](https://leafletjs.com/), [OpenStreetMap](https://www.openstreetmap.org/)
